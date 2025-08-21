@@ -1,10 +1,17 @@
+import java.util.Scanner;
+
 public class Alex {
 
-    public static void echo(String s) {
+    // Method to echo
+    public static void echo() {
+        Scanner scanner = new Scanner(System.in);
+        String s = scanner.next();
         if (s.equals("bye")) {
             System.out.println("Bye. Hope to see you again soon!\n");
+            scanner.close();
         } else {
             System.out.println(s + "\n");
+            echo();
         }
     }
     public static void main(String[] args) {
@@ -16,6 +23,7 @@ public class Alex {
         }
         line = line + "\n";
         System.out.println(line + greeting + action + line);
+        echo();
 
     }
 }
