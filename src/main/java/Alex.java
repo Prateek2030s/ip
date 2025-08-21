@@ -8,6 +8,8 @@ public class Alex {
 
     // Field for a list of tasks
     private static List<String> itemList  = new ArrayList<>();
+
+    private static List<Task> taskList = new ArrayList<>();
     // Method to generate a horizontal line
     private static String lineGenerator() {
         String s = "";
@@ -30,14 +32,27 @@ public class Alex {
         } else if (s.equals("list")) {
             int j = 1;
             String ans = "";
-            for (int i = 0; i < itemList.size(); i++) {
-                ans = ans +  j + ". " + itemList.get(i) + "\n";
+            for (int i = 0; i < taskList.size(); i++) {
+                Task task = taskList.get(i);
+                ans = ans + j + ". " + task + "\n";
+                //ans = ans +  j + ". " + itemList.get(i) + "\n";
                 j++;
             }
             System.out.println(line + ans + line);
             echo();
+        } else if (s.equals("mark")) {
+            int next = scanner.nextInt();
+            taskList.get(next - 1).markTask();
+            System.out.println(line + "Nice! I've marked this task as done:\n" + taskList.get(next - 1) + "\n" + line);
+            echo();
+        } else if (s.equals("unmark")) {
+            int next = scanner.nextInt();
+            Task task = taskList.get(next - 1);
+            task.unmarkTask();
+            System.out.println(line + "Ok, I've marked this task as not done yet:\n" + task + "\n" + line);
+            echo();
         } else {
-            itemList.add(s);
+            taskList.add(new Task(s));
             System.out.println(line + "added: " + s + ". Amazing!\n" + line);
             echo();
         }
