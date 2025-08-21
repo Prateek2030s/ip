@@ -22,7 +22,7 @@ public class Alex {
             System.out.println(line + "Bye. Hope to see you again soon!\n" + line);
             scanner.close();
         } else {
-            System.out.println(line + s + "\n" + line);
+            System.out.println(line + s + "! That is amazing!\n" + line);
             echo();
         }
     }
