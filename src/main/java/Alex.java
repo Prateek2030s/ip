@@ -7,9 +7,8 @@ public class Alex {
     private static String line = Alex.lineGenerator();
 
     // Field for a list of tasks
-    private static List<String> itemList  = new ArrayList<>();
-
     private static List<Task> taskList = new ArrayList<>();
+
     // Method to generate a horizontal line
     private static String lineGenerator() {
         String s = "";
@@ -20,33 +19,31 @@ public class Alex {
     }
 
 
-
-
-    // Method to echo with adding task feature
+    // Method which has features
     public static void echo() {
         Scanner scanner = new Scanner(System.in);
         String s = scanner.nextLine();
-        if (s.equals("bye")) {
+        String[] splitter = s.split(" ");
+        String firstPart = splitter[0];
+        if (firstPart.equals("bye")) {
             System.out.println(line + "Bye. Hope to see you again soon!\n" + line);
             scanner.close();
-        } else if (s.equals("list")) {
+        } else if (firstPart.equals("list")) {
             int j = 1;
             String ans = "";
-            for (int i = 0; i < taskList.size(); i++) {
-                Task task = taskList.get(i);
+            for (Task task : taskList) {
                 ans = ans + j + ". " + task + "\n";
-                //ans = ans +  j + ". " + itemList.get(i) + "\n";
                 j++;
             }
             System.out.println(line + ans + line);
             echo();
-        } else if (s.equals("mark")) {
-            int next = scanner.nextInt();
+        } else if (firstPart.equals("mark")) {
+            int next = Integer.parseInt(splitter[1]);
             taskList.get(next - 1).markTask();
             System.out.println(line + "Nice! I've marked this task as done:\n" + taskList.get(next - 1) + "\n" + line);
             echo();
-        } else if (s.equals("unmark")) {
-            int next = scanner.nextInt();
+        } else if (firstPart.equals("unmark")) {
+            int next = Integer.parseInt(splitter[1]);
             Task task = taskList.get(next - 1);
             task.unmarkTask();
             System.out.println(line + "Ok, I've marked this task as not done yet:\n" + task + "\n" + line);
