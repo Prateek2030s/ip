@@ -20,7 +20,7 @@ public class Alex {
 
 
     // Method which has features
-    public static void echo() {
+    public static void echo() throws AlexExecption{
         Scanner scanner = new Scanner(System.in);
         String s = scanner.nextLine();
         String[] splitter = s.split(" ", 2);
@@ -40,46 +40,68 @@ public class Alex {
             System.out.println(line + ans + line);
             echo();
         } else if (firstPart.equals("mark")) {
+            if (splitter.length <= 1) {
+                throw new AlexExecption("Please state which task you would like to mark");
+            }
             int next = Integer.parseInt(splitter[1]);
+            if (next > taskList.size() || next < taskList.size()) {
+                throw new AlexExecption("Invalid number, please try again");
+            }
             taskList.get(next - 1).markTask();
             System.out.println(line + "Nice! I've marked this task as done:\n" + taskList.get(next - 1) + "\n" + line);
             echo();
         } else if (firstPart.equals("unmark")) {
+            if (splitter.length <= 1) {
+                throw new AlexExecption("Please state which task you like to unmark");
+            }
             int next = Integer.parseInt(splitter[1]);
+            if (next > taskList.size() || next < taskList.size()) {
+                throw new AlexExecption("Invalid number, please try again");
+            }
             Task task = taskList.get(next - 1);
             task.unmarkTask();
             System.out.println(line + "Ok, I've marked this task as not done yet:\n" + task + "\n" + line);
             echo();
         } else if (firstPart.equals("todo")) {
+            if (splitter.length <= 1) {
+                throw new AlexExecption("Please state what you would like todo");
+            }
             Task toAdd = new Todo(splitter[1]);
             taskList.add(toAdd);
             System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
             echo();
         } else if (firstPart.equals("deadline")) {
+            if (splitter.length <= 1) {
+                throw new AlexExecption("Please state what deadline you have and by when");
+            }
             String[] taskBreakdown = splitter[1].split(" /by ");
             Task toAdd = new Deadline(taskBreakdown[0], taskBreakdown[1]);
             taskList.add(toAdd);
             System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
             echo();
         } else if (firstPart.equals("event")) {
+            if (splitter.length <= 1) {
+                throw new AlexExecption("Please state when do you have the event");
+            }
             String[] taskBreakdown = splitter[1].split(" /");
             Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
             taskList.add(toAdd);
             System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
             echo();
+        } else {
+            throw new AlexExecption("I'm sorry, could you try with a valid prompt");
         }
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AlexExecption {
         String greeting = "Hello! I'm Alex.\n";
         String action = "What can I do for you?\n";
         System.out.println(line + greeting + action + line);
-      //  String s = "deadline return book /by sunday";
-       // String[] p = s.split(" /by ");
-       // String s = "event project meeting /from Mon 2pm /to 4pm";
-      //  String[] p = s.split(" /");
-       // System.out.println(p.length);
-       // System.out.println(p[2]);
-        echo();
+        try {
+            echo();
+        } catch (AlexExecption e) {
+            System.out.println(e);
+            main(args);
+        }
 
     }
 }
