@@ -32,9 +32,9 @@ public class Alex {
             scanner.close();
         } else if (firstPart.equals("list")) {
             int j = 1;
-            String ans = "";
+            String ans = "Here are the tasks in your list:\n";
             for (Task task : taskList) {
-                ans = ans + j + ". " + task + "\n";
+                ans = ans + j + "." + task + "\n";
                 j++;
             }
             System.out.println(line + ans + line);
