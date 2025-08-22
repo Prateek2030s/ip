@@ -90,7 +90,14 @@ public class Alex {
             System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
             echo();
         } else if (firstPart.equals("delete")) {
-            Task removed = taskList.remove(Integer.parseInt(splitter[1]) - 1);
+            if (splitter.length <= 1) {
+                throw new AlexExecption("Please state which task to delete");
+            }
+            int next = Integer.parseInt(splitter[1]);
+            if (next > taskList.size() || next < taskList.size()) {
+                throw new AlexExecption("Invalid number, please try again");
+            }
+            Task removed = taskList.remove(next - 1);
             System.out.println(line + "Noted. I've removed this task:\n" + removed + "\n" + afterDelete);
             echo();
         } else {
