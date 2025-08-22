@@ -27,6 +27,7 @@ public class Alex {
         String firstPart = splitter[0];
         String afterAdd1 = line + "Got it. I've added this task:\n";
         String afterAdd2 = String.format("Now you have %d tasks in the list.\n", taskList.size() + 1) + line;
+        String afterDelete = String.format("Now you have %d tasks in the list.\n", taskList.size() - 1) + line;
         if (firstPart.equals("bye")) {
             System.out.println(line + "Bye. Hope to see you again soon!\n" + line);
             scanner.close();
@@ -87,6 +88,10 @@ public class Alex {
             Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
             taskList.add(toAdd);
             System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
+            echo();
+        } else if (firstPart.equals("delete")) {
+            Task removed = taskList.remove(Integer.parseInt(splitter[1]) - 1);
+            System.out.println(line + "Noted. I've removed this task:\n" + removed + "\n" + afterDelete);
             echo();
         } else {
             throw new AlexExecption("I'm sorry, could you try with a valid prompt");
