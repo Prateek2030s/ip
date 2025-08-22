@@ -23,8 +23,10 @@ public class Alex {
     public static void echo() {
         Scanner scanner = new Scanner(System.in);
         String s = scanner.nextLine();
-        String[] splitter = s.split(" ");
+        String[] splitter = s.split(" ", 2);
         String firstPart = splitter[0];
+        String afterAdd1 = line + "Got it. I've added this task:\n";
+        String afterAdd2 = String.format("Now you have %d tasks in the list.\n", taskList.size() + 1) + line;
         if (firstPart.equals("bye")) {
             System.out.println(line + "Bye. Hope to see you again soon!\n" + line);
             scanner.close();
@@ -48,9 +50,22 @@ public class Alex {
             task.unmarkTask();
             System.out.println(line + "Ok, I've marked this task as not done yet:\n" + task + "\n" + line);
             echo();
-        } else {
-            taskList.add(new Task(s));
-            System.out.println(line + "added: " + s + ". Amazing!\n" + line);
+        } else if (firstPart.equals("todo")) {
+            Task toAdd = new Todo(splitter[1]);
+            taskList.add(toAdd);
+            System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
+            echo();
+        } else if (firstPart.equals("deadline")) {
+            String[] taskBreakdown = splitter[1].split(" /by ");
+            Task toAdd = new Deadline(taskBreakdown[0], taskBreakdown[1]);
+            taskList.add(toAdd);
+            System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
+            echo();
+        } else if (firstPart.equals("event")) {
+            String[] taskBreakdown = splitter[1].split(" /");
+            Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
+            taskList.add(toAdd);
+            System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
             echo();
         }
     }
@@ -58,6 +73,12 @@ public class Alex {
         String greeting = "Hello! I'm Alex.\n";
         String action = "What can I do for you?\n";
         System.out.println(line + greeting + action + line);
+      //  String s = "deadline return book /by sunday";
+       // String[] p = s.split(" /by ");
+       // String s = "event project meeting /from Mon 2pm /to 4pm";
+      //  String[] p = s.split(" /");
+       // System.out.println(p.length);
+       // System.out.println(p[2]);
         echo();
 
     }
