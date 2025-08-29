@@ -5,6 +5,11 @@ public class Todo extends Task {
     }
 
     @Override
+    public String toFileString() {
+        return "T / " + this.taskState() + " / " + this.getDescription();
+    }
+
+    @Override
     public String toString() {
         return "[T]" + super.toString();
     }
