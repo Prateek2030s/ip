@@ -10,6 +10,11 @@ public class Event extends Task {
     }
 
     @Override
+    public String toFileString() {
+        return "E / " + this.taskState() + " / " + this.getDescription() + " / " + this.from + " " + this.to;
+    }
+
+    @Override
     public String toString() {
         String[] fromSplit = from.split("from");
         String[] toSplit = to.split("to");
