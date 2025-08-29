@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +18,12 @@ public class Alex {
             s = s + "_";
         }
         return s + "\n";
+    }
+
+    private static void writeToFile(String fileName, String list) throws IOException {
+        FileWriter fw = new FileWriter(fileName);
+        fw.write(list);
+        fw.close();
     }
 
 
