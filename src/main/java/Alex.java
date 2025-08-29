@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Alex {
     // Field for a horizontal line
-    private static String line = Alex.lineGenerator();
+    private static final String line = Alex.lineGenerator();
 
     // Field for a list of tasks
     private static List<Task> taskList = new ArrayList<>();
@@ -19,6 +19,18 @@ public class Alex {
         }
         return s + "\n";
     }
+
+    // Method to generate list of tasks
+    private static String listIterator() {
+        int j = 1;
+        String ans = "Here are the tasks in your list:\n";
+        for (Task task : taskList) {
+            ans = ans + j + "." + task + "\n";
+            j++;
+        }
+        return ans;
+    }
+
 
     private static void writeToFile(String fileName, String list) throws IOException {
         FileWriter fw = new FileWriter(fileName);
@@ -40,13 +52,7 @@ public class Alex {
             System.out.println(line + "Bye. Hope to see you again soon!\n" + line);
             scanner.close();
         } else if (firstPart.equals("list")) {
-            int j = 1;
-            String ans = "Here are the tasks in your list:\n";
-            for (Task task : taskList) {
-                ans = ans + j + "." + task + "\n";
-                j++;
-            }
-            System.out.println(line + ans + line);
+            System.out.println(line + Alex.listIterator() + line);
             echo();
         } else if (firstPart.equals("mark")) {
             if (splitter.length <= 1) {
