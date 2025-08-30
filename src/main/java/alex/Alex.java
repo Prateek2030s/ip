@@ -2,6 +2,9 @@ package alex;
 
 import java.io.FileNotFoundException;
 
+/**
+ * Represents the chatbot model used
+ */
 public class Alex {
     // Field for a horizontal line
     public static final String LINE = Alex.lineGenerator();
@@ -21,7 +24,10 @@ public class Alex {
         }
     }
 
-    // Method to generate a horizontal line
+    /**
+     * Generates a straight horizontal line
+     * @return Straight horizontal line
+     */
     public static String lineGenerator() {
         String s = "";
         for (int i = 0; i < 100; i++) {
@@ -30,6 +36,9 @@ public class Alex {
         return s + "\n";
     }
 
+    /**
+     * Method to get the chatbot started and running
+     */
     public void run() {
         String greeting = "Hello! I'm Alex.\n";
         String action = "What can I do for you?\n";

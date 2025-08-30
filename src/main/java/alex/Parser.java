@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents the procedure to understand user inputs
+ */
 public class Parser {
     private String toParse;
 
@@ -11,6 +14,12 @@ public class Parser {
         this.toParse = toParse;
     }
 
+    /**
+     * Parses user inputs
+     * @param taskList List of task used currently
+     * @param storage Current storage of tasklist
+     * @throws AlexExecption if invalid inputs are passed into
+     */
     public void setToParse(TaskList taskList, Storage storage) throws AlexExecption {
         String[] splitter = toParse.split(" ", 2);
         String firstPart = splitter[0];

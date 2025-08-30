@@ -1,5 +1,8 @@
 package alex;
 
+/**
+ * Type of task to indicate an event
+ */
 public class Event extends Task {
 
     private String from;
