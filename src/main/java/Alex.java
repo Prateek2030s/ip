@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -171,7 +173,8 @@ public class Alex {
             }
 
             String[] taskBreakdown = splitter[1].split(" /by ");
-            Task toAdd = new Deadline(taskBreakdown[0], taskBreakdown[1]);
+            String date = LocalDate.parse(taskBreakdown[1]).format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+            Task toAdd = new Deadline(taskBreakdown[0], date);
             taskList.add(toAdd);
             System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
 
