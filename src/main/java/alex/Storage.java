@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Represents the storage of the list of tasks
+ */
 public class Storage {
     private String filePath;
 
@@ -14,12 +17,23 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    /**
+     * Saves the task list into hard disk
+     * @param taskList User's list of tasks
+     * @throws IOException if the file is not found
+     */
     public void saveTask(TaskList taskList) throws IOException {
         FileWriter fw = new FileWriter(filePath);
         fw.write(String.valueOf(taskList.toSaveList()));
         fw.close();
     }
 
+    /**
+     * Loads the saved tasklist from hard disk
+     * during a new interaction with the chatbot
+     * @return List of tasks saved previously
+     * @throws FileNotFoundException if teh file is nto found
+     */
     public ArrayList<Task> load() throws FileNotFoundException {
         File f = new File(filePath);
         Scanner sc = new Scanner(f);

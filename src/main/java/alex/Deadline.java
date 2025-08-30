@@ -1,5 +1,8 @@
 package alex;
 
+/**
+ * Type of task to indicate deadline
+ */
 public class Deadline extends Task {
 
     private String by;
