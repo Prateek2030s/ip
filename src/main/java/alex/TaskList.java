@@ -34,6 +34,19 @@ public class TaskList {
         return taskList.remove(index);
     }
 
+    public String findMatch(String find) {
+        String ans = Alex.LINE + "Here are the matching tasks in your list:\n";
+        int i = 1;
+        for (Task task : taskList) {
+            if (task.toString().contains(find)) {
+                ans = ans + i + "." + task + "\n";
+                i++;
+            }
+        }
+        ans = ans + Alex.LINE;
+        return ans;
+    }
+
     public int size() {
         return taskList.size();
     }
