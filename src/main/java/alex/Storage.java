@@ -45,21 +45,23 @@ public class Storage {
             int taskState = Integer.parseInt(parts[1]);
             String description = parts[2];
             switch (type) {
-                case "T":
-                    Task t = new Todo(description);
-                    t.handleTask(taskState);
-                    taskList.add(t);
-                    break;
-                case "D":
-                    Task t1 = new Deadline(description, parts[3]);
-                    t1.handleTask(taskState);
-                    taskList.add(t1);
-                    break;
-                case "E":
-                    Task t2 = new Event(description, parts[3], parts[4]);
-                    t2.handleTask(taskState);
-                    taskList.add(t2);
-                    break;
+            case "T":
+                Task t = new Todo(description);
+                t.handleTask(taskState);
+                taskList.add(t);
+                break;
+
+            case "D":
+                Task t1 = new Deadline(description, parts[3]);
+                t1.handleTask(taskState);
+                taskList.add(t1);
+                break;
+
+            case "E":
+                Task t2 = new Event(description, parts[3], parts[4]);
+                t2.handleTask(taskState);
+                taskList.add(t2);
+                break;
             }
         }
         sc.close();

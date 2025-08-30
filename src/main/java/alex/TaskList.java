@@ -75,6 +75,7 @@ public class TaskList {
         return taskList.size();
     }
 
+    public String generateTaskList() {
     /**
      * List representation
      * @return List representation

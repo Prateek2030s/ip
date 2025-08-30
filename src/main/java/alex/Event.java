@@ -16,7 +16,7 @@ public class Event extends Task {
 
     @Override
     public String toFileString() {
-        return "E / " + this.taskState() + " / " + this.getDescription() + " / " + this.from + " " + this.to;
+        return "E / " + this.doTaskState() + " / " + this.getDescription() + " / " + this.from + " " + this.to;
     }
 
     @Override

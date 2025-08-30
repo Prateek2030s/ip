@@ -36,7 +36,7 @@ public class Parser {
 
         } else if (firstPart.equals("list")) {
 
-            System.out.println(Alex.LINE + taskList.fullTaskList() + Alex.LINE);
+            System.out.println(Alex.LINE + taskList.generateTaskList() + Alex.LINE);
             new Ui().run(taskList, storage);
 
         } else if (firstPart.equals("mark")) {

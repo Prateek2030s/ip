@@ -42,6 +42,8 @@ public abstract class Task {
      * @return 0 if done and 1 if not done
      */
     public int taskState() {
+    // To indicate whether it is 0 or 1 in fileToString
+    public int doTaskState() {
         if (isDone) {
             return 0;
         } else {
