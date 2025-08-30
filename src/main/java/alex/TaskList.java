@@ -75,12 +75,12 @@ public class TaskList {
         return taskList.size();
     }
 
-    public String generateTaskList() {
+
     /**
      * List representation
      * @return List representation
      */
-    public String fullTaskList() {
+    public String generateTaskList() {
         int i = 1;
         String ans = "Here are the tasks in your list:\n";
         for (Task t : taskList) {
