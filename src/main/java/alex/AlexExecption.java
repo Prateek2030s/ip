@@ -1,4 +1,4 @@
-
+package alex;
 
 public class AlexExecption extends Exception{
 
