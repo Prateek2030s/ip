@@ -160,6 +160,9 @@ public class Parser {
                 new Ui().run(taskList, storage);
             }
 
+        } else if (firstPart.equals("find")) {
+            System.out.println(taskList.findMatch(splitter[1]));
+            new Ui().run(taskList, storage);
         } else {
             throw new AlexExecption("I'm sorry, could you try with a valid prompt");
         }
