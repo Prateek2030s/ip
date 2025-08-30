@@ -8,7 +8,7 @@ public class Todo extends Task {
 
     @Override
     public String toFileString() {
-        return "T / " + this.taskState() + " / " + this.getDescription();
+        return "T / " + this.doTaskState() + " / " + this.getDescription();
     }
 
     @Override

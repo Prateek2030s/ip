@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 
 public class Alex {
     // Field for a horizontal line
-    public static final String LINE = Alex.lineGenerator();
+    public static final String LINE = Alex.generateLine();
 
     private Storage storage;
     private TaskList taskList;
@@ -22,7 +22,7 @@ public class Alex {
     }
 
     // Method to generate a horizontal line
-    public static String lineGenerator() {
+    public static String generateLine() {
         String s = "";
         for (int i = 0; i < 100; i++) {
             s = s + "_";
