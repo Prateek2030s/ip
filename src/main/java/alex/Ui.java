@@ -1,3 +1,5 @@
+package alex;
+
 import java.util.Scanner;
 
 public class Ui {
