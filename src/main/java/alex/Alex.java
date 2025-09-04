@@ -8,12 +8,13 @@ import java.io.FileNotFoundException;
 public class Alex {
     // Field for a horizontal line
     public static final String LINE = Alex.generateLine();
+    private static final String filePath = "./data/alex.txt";
 
     private Storage storage;
     private TaskList taskList;
     private Ui ui;
 
-    public Alex(String filePath) {
+    public Alex() {
         ui = new Ui();
         storage = new Storage(filePath);
         try {
@@ -36,18 +37,19 @@ public class Alex {
         return s + "\n";
     }
 
-    /**
-     * Method to get the chatbot started and running
-     */
-    public void run() {
-        String greeting = "Hello! I'm Alex.\n";
-        String action = "What can I do for you?\n";
-        System.out.println(LINE + greeting + action + LINE);
-        ui.run(taskList, storage);
+//    public void run() {
+//        String greeting = "Hello! I'm Alex.\n";
+//        String action = "What can I do for you?\n";
+//        System.out.println(LINE + greeting + action + LINE);
+//        ui.run(taskList, storage);
+//    }
+
+    public String getResponse(String input) {
+        return ui.run(taskList, storage, input);
     }
 
-    public static void main(String[] args) throws AlexExecption {
-        new Alex("./data/alex.txt").run();
-
-    }
+//    public static void main(String[] args) {
+//        new Alex().run();
+//
+//    }
 }

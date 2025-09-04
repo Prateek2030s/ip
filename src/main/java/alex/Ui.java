@@ -12,17 +12,19 @@ public class Ui {
      * @param taskList List of task currently used
      * @param storage Current storage of task list
      */
-      public void run(TaskList taskList, Storage storage) {
+      public String run(TaskList taskList, Storage storage, String input) {
           try {
-              Scanner scanner = new Scanner(System.in);
-              String s = scanner.nextLine();
-              Parser p = new Parser(s);
-              p.setToParse(taskList, storage);
+//              Scanner scanner = new Scanner(System.in);
+//              String s = scanner.nextLine();
+              Parser p = new Parser(input);
+              return p.parseInput(taskList, storage);
           } catch (AlexExecption e) {
-              System.out.println(e);
-              this.run(taskList, storage);
+              //System.out.println(e);
+              //this.run(taskList, storage);
+              return e.getMessage();
           }
 
       }
+
 
 }
