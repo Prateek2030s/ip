@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
  */
 public class Alex {
     // Field for a horizontal line
-    public static final String LINE = Alex.lineGenerator();
+    public static final String LINE = Alex.generateLine();
     private static final String filePath = "./data/alex.txt";
 
     private Storage storage;

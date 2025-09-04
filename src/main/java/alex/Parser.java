@@ -8,20 +8,21 @@ import java.time.format.DateTimeFormatter;
  * Represents the procedure to understand user inputs
  */
 public class Parser {
-    private String toParse;
+    private String input;
 
-    public Parser(String toParse) {
-        this.toParse = toParse;
+    public Parser(String input) {
+        this.input = input;
     }
 
     /**
      * Parses user inputs
+     *
      * @param taskList List of task used currently
      * @param storage Current storage of tasklist
      * @throws AlexExecption if invalid inputs are passed into
      */
     public void setToParse(TaskList taskList, Storage storage) throws AlexExecption {
-        String[] splitter = toParse.split(" ", 2);
+        String[] splitter = input.split(" ", 2);
         String firstPart = splitter[0];
         String afterAdd1 = Alex.LINE + "Got it. I've added this task:\n";
         String afterAdd2 = String.format("Now you have %d tasks in the list.\n", taskList.size() + 1)
