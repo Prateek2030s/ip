@@ -13,7 +13,7 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private Alex alex = new Alex("null");
+    private Alex alex = new Alex();
 
     @Override
     public void start(Stage stage) {

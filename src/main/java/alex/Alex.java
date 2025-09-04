@@ -5,12 +5,13 @@ import java.io.FileNotFoundException;
 public class Alex {
     // Field for a horizontal line
     public static final String LINE = Alex.lineGenerator();
+    private static final String filePath = "./data/alex.txt";
 
     private Storage storage;
     private TaskList taskList;
     private Ui ui;
 
-    public Alex(String filePath) {
+    public Alex() {
         ui = new Ui();
         storage = new Storage(filePath);
         try {
@@ -37,8 +38,12 @@ public class Alex {
         ui.run(taskList, storage);
     }
 
-    public static void main(String[] args) throws AlexExecption {
-        new Alex("./data/alex.txt").run();
+    public String getResponse(String input) {
+        return null;
+    }
+
+    public static void main(String[] args) {
+        new Alex().run();
 
     }
 }
