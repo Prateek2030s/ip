@@ -37,19 +37,19 @@ public class Alex {
         return s + "\n";
     }
 
-    public void run() {
-        String greeting = "Hello! I'm Alex.\n";
-        String action = "What can I do for you?\n";
-        System.out.println(LINE + greeting + action + LINE);
-        ui.run(taskList, storage);
-    }
+//    public void run() {
+//        String greeting = "Hello! I'm Alex.\n";
+//        String action = "What can I do for you?\n";
+//        System.out.println(LINE + greeting + action + LINE);
+//        ui.run(taskList, storage);
+//    }
 
     public String getResponse(String input) {
-        return null;
+        return ui.run(taskList, storage, input);
     }
 
-    public static void main(String[] args) {
-        new Alex().run();
-
-    }
+//    public static void main(String[] args) {
+//        new Alex().run();
+//
+//    }
 }
