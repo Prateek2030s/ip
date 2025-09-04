@@ -24,22 +24,11 @@ public class Parser {
     public String parseInput(TaskList taskList, Storage storage) throws AlexExecption {
         String[] splitter = input.split(" ", 2);
         String firstPart = splitter[0];
-//        String afterAdd1 = Alex.LINE + "Got it. I've added this task:\n";
-//        String afterAdd2 = String.format("Now you have %d tasks in the list.\n", taskList.size() + 1)
-//                           +
-//                           Alex.LINE;
-//        String afterDelete = String.format("Now you have %d tasks in the list.\n", taskList.size() - 1)
-//                             +
-//                             Alex.LINE;
-        if (firstPart.equals("bye")) {
 
-           // System.out.println(Alex.LINE + "Bye. Hope to see you again soon!\n" + Alex.LINE);
+        if (firstPart.equals("bye")) {
             return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
 
         } else if (firstPart.equals("list")) {
-
-           // System.out.println(Alex.LINE + taskList.generateTaskList() + Alex.LINE);
-           // new Ui().run(taskList, storage);
             return taskList.generateTaskList();
 
         } else if (firstPart.equals("mark")) {
@@ -96,7 +85,6 @@ public class Parser {
 
             Task toAdd = new Todo(splitter[1]);
             taskList.add(toAdd);
-           // System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
 
             try {
                 storage.saveTask(taskList);
@@ -104,7 +92,6 @@ public class Parser {
             catch (IOException e) {
                 return ("File not found. Unable to save");
             } finally {
-                //new Ui().run(taskList, storage);
                 String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
                 String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
                 return addTask + taskLength;
@@ -120,7 +107,6 @@ public class Parser {
             String date = LocalDate.parse(taskBreakdown[1]).format(DateTimeFormatter.ofPattern("MMM d yyyy"));
             Task toAdd = new Deadline(taskBreakdown[0], date);
             taskList.add(toAdd);
-            //System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
 
             try {
                 storage.saveTask(taskList);
@@ -128,7 +114,6 @@ public class Parser {
             catch (IOException e) {
                 return ("File not found. Unable to save");
             } finally {
-               // new Ui().run(taskList, storage);
                 String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
                 String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
                 return addTask + taskLength;
@@ -143,7 +128,6 @@ public class Parser {
             String[] taskBreakdown = splitter[1].split(" / ");
             Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
             taskList.add(toAdd);
-            //System.out.println(afterAdd1 + toAdd + "\n" + afterAdd2);
 
             try {
                 storage.saveTask(taskList);
@@ -151,7 +135,6 @@ public class Parser {
             catch (IOException e) {
                 return ("File not found. Unable to save");
             } finally {
-                //new Ui().run(taskList, storage);
                 String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
                 String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
                 return addTask + taskLength;
@@ -170,7 +153,6 @@ public class Parser {
             }
 
             Task removed = taskList.remove(next - 1);
-          //  System.out.println(Alex.LINE + "Noted. I've removed this task:\n" + removed + "\n" + afterDelete);
 
             try {
                 storage.saveTask(taskList);
@@ -178,15 +160,12 @@ public class Parser {
             catch (IOException e) {
                 return ("File not found. Unable to save");
             } finally {
-                //new Ui().run(taskList, storage);
                 String deleteTask = String.format("Ok, I've deleted this task: %s\n", removed);
                 String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
                 return deleteTask + taskLength;
             }
 
         } else if (firstPart.equals("find")) {
-            //System.out.println(taskList.findMatch(splitter[1]));
-            //new Ui().run(taskList, storage);
             return "Here is what I've found:\n" + taskList.findMatch(splitter[1]);
         } else if (firstPart.equals("hello")) {
             return "I'm Alex. What do you want from me";
