@@ -1,7 +1,7 @@
 package alex;
 
 /**
- * Represents a general task to be included in the list
+ * Represents a general task to be included in the list.
  */
 public abstract class Task {
 
@@ -14,8 +14,9 @@ public abstract class Task {
     }
 
     /**
-     * Format in which tasks are saved in storage
-     * @return
+     * Represents format in which tasks are saved in storage.
+     *
+     * @return Format of tasks to be stored.
      */
     public abstract String toFileString();
 
@@ -38,7 +39,8 @@ public abstract class Task {
     }
 
     /**
-     * Number version to indicate as done or not done
+     * Gives number version to indicate as done or not done.
+     *
      * @return 0 if done and 1 if not done
      */
     public int doTaskState() {
@@ -50,7 +52,8 @@ public abstract class Task {
     }
 
     /**
-     * Converts number stored to actual representation of done or not done
+     * Converts number stored to actual representation of done or not done.
+     *
      * @param i 0 if done and 1 if not done
      */
     public void handleTask(int i) {

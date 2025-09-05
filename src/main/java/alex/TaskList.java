@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the list of tasks stored
+ * Represents the list of tasks stored.
  */
 public class TaskList {
     List<Task> taskList;
@@ -18,8 +18,9 @@ public class TaskList {
     }
 
     /**
-     * Marks the task as done
-     * @param index Position of task in the list
+     * Marks the task as done.
+     *
+     * @param index Position of task in the list.
      */
     public void mark(int index) {
         taskList.get(index - 1).markTask();
@@ -28,8 +29,9 @@ public class TaskList {
     }
 
     /**
-     * Marks the task as undone
-     * @param index Position of task in the list
+     * Marks the task as undone.
+     *
+     * @param index Position of task in the list.
      */
     public void unmark(int index) {
         Task task = taskList.get(index - 1);
@@ -38,17 +40,19 @@ public class TaskList {
     }
 
     /**
-     * Adds task into the list
-     * @param task Task to be added
+     * Adds task into the list.
+     *
+     * @param task Task to be added.
      */
     public void add(Task task) {
         taskList.add(task);
     }
 
     /**
-     * Removes task from list
-     * @param index Position of task to be removed in the list
-     * @return
+     * Removes task from list.
+     *
+     * @param index Position of task to be removed in the list.
+     * @return The task that is being removed.
      */
     public Task remove(int index) {
         return taskList.remove(index);
@@ -68,8 +72,8 @@ public class TaskList {
     }
 
     /**
-     * List length
-     * @return List length
+     * Tells the list length.
+     * @return List length.
      */
     public int size() {
         return taskList.size();
@@ -77,8 +81,9 @@ public class TaskList {
 
 
     /**
-     * List representation
-     * @return List representation
+     * Gives a string representation of the list to be displayed.
+     *
+     * @return List representation that will be displayed.
      */
     public String generateTaskList() {
         int i = 1;
@@ -91,6 +96,12 @@ public class TaskList {
         return ans;
     }
 
+    /**
+     * Gives the string representation of the tasklist to be
+     * stored in hard disk.
+     *
+     * @return List representation that will be stored.
+     */
     public String toSaveList() {
         StringBuilder s = new StringBuilder();
         for (Task t : taskList) {

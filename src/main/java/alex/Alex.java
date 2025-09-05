@@ -3,7 +3,7 @@ package alex;
 import java.io.FileNotFoundException;
 
 /**
- * Represents the chatbot model used
+ * Represents the chatbot model used.
  */
 public class Alex {
     // Field for a horizontal line
@@ -26,8 +26,9 @@ public class Alex {
     }
 
     /**
-     * Generates a straight horizontal line
-     * @return Straight horizontal line
+     * Generates a straight horizontal line.
+     *
+     * @return Straight horizontal line.
      */
     public static String generateLine() {
         String s = "";
@@ -37,19 +38,14 @@ public class Alex {
         return s + "\n";
     }
 
-//    public void run() {
-//        String greeting = "Hello! I'm Alex.\n";
-//        String action = "What can I do for you?\n";
-//        System.out.println(LINE + greeting + action + LINE);
-//        ui.run(taskList, storage);
-//    }
-
+    /**
+     * Returns chatbot's response to user's input.
+     *
+     * @param input User's input to the chatbot.
+     * @return Chatbot's response to the input given by the user.
+     */
     public String getResponse(String input) {
         return ui.run(taskList, storage, input);
     }
 
-//    public static void main(String[] args) {
-//        new Alex().run();
-//
-//    }
 }

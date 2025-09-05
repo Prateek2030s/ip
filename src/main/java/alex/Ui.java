@@ -1,26 +1,24 @@
 package alex;
 
-import java.util.Scanner;
-
 /**
- * Represents the user interaction
+ * Represents the user interaction.
  */
 public class Ui {
 
     /**
-     * Receives user inputs
-     * @param taskList List of task currently used
-     * @param storage Current storage of task list
+     * Sends the current tasklist, storage and user's input to the parser
+     * and returns the chatbot's response after parsing the input.
+     *
+     * @param taskList List of task currently used.
+     * @param storage Current storage of task list.
+     * @param input User's input to the chatbot.
+     * @return Response of the chatbot after parsing user's input.
      */
       public String run(TaskList taskList, Storage storage, String input) {
           try {
-//              Scanner scanner = new Scanner(System.in);
-//              String s = scanner.nextLine();
               Parser p = new Parser(input);
               return p.parseInput(taskList, storage);
-          } catch (AlexExecption e) {
-              //System.out.println(e);
-              //this.run(taskList, storage);
+          } catch (AlexException e) {
               return e.getMessage();
           }
 
