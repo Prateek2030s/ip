@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents the procedure to understand user inputs
+ * Represents the procedure to understand user inputs.
  */
 public class Parser {
     private String input;
@@ -15,13 +15,14 @@ public class Parser {
     }
 
     /**
-     * Parses user inputs
+     * Parses user inputs and returns the chatbot's response.
      *
      * @param taskList List of task used currently
      * @param storage Current storage of tasklist
-     * @throws AlexExecption if invalid inputs are passed into
+     * @return Chatbot's response to parsed user input.
+     * @throws AlexException if invalid inputs are passed into
      */
-    public String parseInput(TaskList taskList, Storage storage) throws AlexExecption {
+    public String parseInput(TaskList taskList, Storage storage) throws AlexException {
         String[] splitter = input.split(" ", 2);
         String firstPart = splitter[0];
 
@@ -34,13 +35,13 @@ public class Parser {
         } else if (firstPart.equals("mark")) {
 
             if (splitter.length <= 1) {
-                throw new AlexExecption("Please state which task you would like to mark");
+                throw new AlexException("Please state which task you would like to mark");
             }
 
             int taskNumber = Integer.parseInt(splitter[1]);
 
             if (taskNumber > taskList.size() || taskNumber < 0) {
-                throw new AlexExecption("Invalid number, please try again");
+                throw new AlexException("Invalid number, please try again");
             }
 
              taskList.mark(taskNumber);
@@ -58,13 +59,13 @@ public class Parser {
         } else if (firstPart.equals("unmark")) {
 
             if (splitter.length <= 1) {
-                throw new AlexExecption("Please state which task you like to unmark");
+                throw new AlexException("Please state which task you like to unmark");
             }
 
             int taskNumber = Integer.parseInt(splitter[1]);
 
             if (taskNumber > taskList.size() || taskNumber < 0) {
-                throw new AlexExecption("Invalid number, please try again");
+                throw new AlexException("Invalid number, please try again");
             }
               taskList.unmark(taskNumber);
 
@@ -80,7 +81,7 @@ public class Parser {
         } else if (firstPart.equals("todo")) {
 
             if (splitter.length <= 1) {
-                throw new AlexExecption("Please state what you would like todo");
+                throw new AlexException("Please state what you would like todo");
             }
 
             Task toAdd = new Todo(splitter[1]);
@@ -100,7 +101,7 @@ public class Parser {
         } else if (firstPart.equals("deadline")) {
 
             if (splitter.length <= 1) {
-                throw new AlexExecption("Please state what deadline you have and by when");
+                throw new AlexException("Please state what deadline you have and by when");
             }
 
             String[] taskBreakdown = splitter[1].split(" /by ");
@@ -122,7 +123,7 @@ public class Parser {
         } else if (firstPart.equals("event")) {
 
             if (splitter.length <= 1) {
-                throw new AlexExecption("Please state when do you have the event");
+                throw new AlexException("Please state when do you have the event");
             }
 
             String[] taskBreakdown = splitter[1].split(" / ");
@@ -143,13 +144,13 @@ public class Parser {
         } else if (firstPart.equals("delete")) {
 
             if (splitter.length <= 1) {
-                throw new AlexExecption("Please state which task to delete");
+                throw new AlexException("Please state which task to delete");
             }
 
             int next = Integer.parseInt(splitter[1]);
 
             if (next > taskList.size() || next < 0) {
-                throw new AlexExecption("Invalid number, please try again");
+                throw new AlexException("Invalid number, please try again");
             }
 
             Task removed = taskList.remove(next - 1);
@@ -170,7 +171,7 @@ public class Parser {
         } else if (firstPart.equals("hello")) {
             return "I'm Alex. What do you want from me";
         } else {
-            throw new AlexExecption("HAHAHA but I don't know what it means!");
+            throw new AlexException("HAHAHA but I don't know what it means!");
         }
     }
 

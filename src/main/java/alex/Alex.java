@@ -27,6 +27,7 @@ public class Alex {
 
     /**
      * Generates a straight horizontal line.
+     *
      * @return Straight horizontal line.
      */
     public static String generateLine() {

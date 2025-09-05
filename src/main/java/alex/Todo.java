@@ -1,7 +1,7 @@
 package alex;
 
 /**
- * Type of task to indicate what to do
+ * Type of task to indicate what to do.
  */
 public class Todo extends Task {
 
