@@ -18,7 +18,7 @@ public class Ui {
           try {
               Parser p = new Parser(input);
               return p.parseInput(taskList, storage);
-          } catch (AlexExecption e) {
+          } catch (AlexException e) {
               return e.getMessage();
           }
 
