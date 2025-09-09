@@ -19,6 +19,7 @@ public class Storage {
 
     /**
      * Saves the task list into hard disk
+     *
      * @param taskList User's list of tasks
      * @throws IOException if the file is not found
      */
@@ -31,6 +32,7 @@ public class Storage {
     /**
      * Loads the saved tasklist from hard disk
      * during a new interaction with the chatbot
+     *
      * @return List of tasks saved previously
      * @throws FileNotFoundException if teh file is nto found
      */

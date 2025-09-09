@@ -175,5 +175,15 @@ public class Parser {
         }
     }
 
+    public String parseGreetingMessage() {
+        return "Hello, I'm Alex. What do you want from me";
+    }
+
+    public String parseByeMessage() {
+        return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
+    }
+
+
+
 
 }
