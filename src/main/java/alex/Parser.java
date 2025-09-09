@@ -19,8 +19,12 @@ public class Parser {
         this.storage = storage;
     }
 
-    public String[] inputBreakdown(String input) {
+    public String[] inputBreakdown() {
         return input.split(" ", 2);
+    }
+
+    public String firstWord() {
+        return this.inputBreakdown()[0];
     }
 
     /**
@@ -30,22 +34,20 @@ public class Parser {
      * @throws AlexException if invalid inputs are passed into
      */
     public String parseInput() throws AlexException {
-        String[] splitter = input.split(" ", 2);
-        String firstPart = splitter[0];
 
-        if (firstPart.equals("bye")) {
-            return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
+        if (firstWord().equals("bye")) {
+            return this.parseByeInput();
 
-        } else if (firstPart.equals("list")) {
+        } else if (firstWord().equals("list")) {
             return taskList.generateTaskList();
 
-        } else if (firstPart.equals("mark")) {
+        } else if (firstWord().equals("mark")) {
 
-            if (splitter.length <= 1) {
+            if (inputBreakdown().length <= 1) {
                 throw new AlexException("Please state which task you would like to mark");
             }
 
-            int taskNumber = Integer.parseInt(splitter[1]);
+            int taskNumber = Integer.parseInt(inputBreakdown()[1]);
 
             if (taskNumber > taskList.size() || taskNumber < 0) {
                 throw new AlexException("Invalid number, please try again");
@@ -63,13 +65,13 @@ public class Parser {
                 return "Amazing, Task " + taskNumber + " marked.";
             }
 
-        } else if (firstPart.equals("unmark")) {
+        } else if (firstWord().equals("unmark")) {
 
-            if (splitter.length <= 1) {
+            if (inputBreakdown().length <= 1) {
                 throw new AlexException("Please state which task you like to unmark");
             }
 
-            int taskNumber = Integer.parseInt(splitter[1]);
+            int taskNumber = Integer.parseInt(inputBreakdown()[1]);
 
             if (taskNumber > taskList.size() || taskNumber < 0) {
                 throw new AlexException("Invalid number, please try again");
@@ -85,13 +87,13 @@ public class Parser {
                 return  "Amazing, Task " + taskNumber + " unmarked.";
             }
 
-        } else if (firstPart.equals("todo")) {
+        } else if (firstWord().equals("todo")) {
 
-            if (splitter.length <= 1) {
+            if (inputBreakdown().length <= 1) {
                 throw new AlexException("Please state what you would like todo");
             }
 
-            Task toAdd = new Todo(splitter[1]);
+            Task toAdd = new Todo(inputBreakdown()[1]);
             taskList.add(toAdd);
 
             try {
@@ -105,13 +107,13 @@ public class Parser {
                 return addTask + taskLength;
             }
 
-        } else if (firstPart.equals("deadline")) {
+        } else if (firstWord().equals("deadline")) {
 
-            if (splitter.length <= 1) {
+            if (inputBreakdown().length <= 1) {
                 throw new AlexException("Please state what deadline you have and by when");
             }
 
-            String[] taskBreakdown = splitter[1].split(" /by ");
+            String[] taskBreakdown = inputBreakdown()[1].split(" /by ");
             String date = LocalDate.parse(taskBreakdown[1]).format(DateTimeFormatter.ofPattern("MMM d yyyy"));
             Task toAdd = new Deadline(taskBreakdown[0], date);
             taskList.add(toAdd);
@@ -127,13 +129,13 @@ public class Parser {
                 return addTask + taskLength;
             }
 
-        } else if (firstPart.equals("event")) {
+        } else if (firstWord().equals("event")) {
 
-            if (splitter.length <= 1) {
+            if (inputBreakdown().length <= 1) {
                 throw new AlexException("Please state when do you have the event");
             }
 
-            String[] taskBreakdown = splitter[1].split(" / ");
+            String[] taskBreakdown = inputBreakdown()[1].split(" / ");
             Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
             taskList.add(toAdd);
 
@@ -148,35 +150,12 @@ public class Parser {
                 return addTask + taskLength;
             }
 
-        } else if (firstPart.equals("delete")) {
-
-            if (splitter.length <= 1) {
-                throw new AlexException("Please state which task to delete");
-            }
-
-            int next = Integer.parseInt(splitter[1]);
-
-            if (next > taskList.size() || next < 0) {
-                throw new AlexException("Invalid number, please try again");
-            }
-
-            Task removed = taskList.remove(next - 1);
-
-            try {
-                storage.saveTask(taskList);
-            }
-            catch (IOException e) {
-                return ("File not found. Unable to save");
-            } finally {
-                String deleteTask = String.format("Ok, I've deleted this task: %s\n", removed);
-                String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-                return deleteTask + taskLength;
-            }
-
-        } else if (firstPart.equals("find")) {
-            return "Here is what I've found:\n" + taskList.findMatch(splitter[1]);
-        } else if (firstPart.equals("hello")) {
-            return "I'm Alex. What do you want from me";
+        } else if (firstWord().equals("delete")) {
+            return this.parseDeleteInput();
+        } else if (firstWord().equals("find")) {
+            return this.parseFindInput();
+        } else if (firstWord().equals("hello")) {
+            return parseGreetingInput();
         } else {
             throw new AlexException("HAHAHA but I don't know what it means!");
         }
@@ -190,9 +169,34 @@ public class Parser {
         return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
     }
 
-//    public String parseFindInput() {
-//
-//    }
+    public String parseFindInput() {
+        return taskList.findMatch(this.inputBreakdown()[1]);
+    }
+
+    public String parseDeleteInput() throws AlexException {
+        if (inputBreakdown().length <= 1) {
+            throw new AlexException("Please state which task to delete");
+        }
+
+        int next = Integer.parseInt(inputBreakdown()[1]);
+
+        if (next > taskList.size() || next < 0) {
+            throw new AlexException("Invalid number, please try again");
+        }
+
+        Task removed = taskList.remove(next - 1);
+
+        try {
+            storage.saveTask(taskList);
+        }
+        catch (IOException e) {
+            return ("File not found. Unable to save");
+        } finally {
+            String deleteTask = String.format("Ok, I've deleted this task: %s\n", removed);
+            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
+            return deleteTask + taskLength;
+        }
+    }
 
 
 
