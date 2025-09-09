@@ -8,21 +8,28 @@ import java.time.format.DateTimeFormatter;
  * Represents the procedure to understand user inputs.
  */
 public class Parser {
-    private String input;
 
-    public Parser(String input) {
+    private String input;
+    private TaskList taskList;
+    private Storage storage;
+
+    public Parser(String input, TaskList taskList, Storage storage) {
         this.input = input;
+        this.taskList = taskList;
+        this.storage = storage;
+    }
+
+    public String[] inputBreakdown(String input) {
+        return input.split(" ", 2);
     }
 
     /**
      * Parses user inputs and returns the chatbot's response.
      *
-     * @param taskList List of task used currently
-     * @param storage Current storage of tasklist
      * @return Chatbot's response to parsed user input.
      * @throws AlexException if invalid inputs are passed into
      */
-    public String parseInput(TaskList taskList, Storage storage) throws AlexException {
+    public String parseInput() throws AlexException {
         String[] splitter = input.split(" ", 2);
         String firstPart = splitter[0];
 
@@ -175,13 +182,17 @@ public class Parser {
         }
     }
 
-    public String parseGreetingMessage() {
+    public String parseGreetingInput() {
         return "Hello, I'm Alex. What do you want from me";
     }
 
-    public String parseByeMessage() {
+    public String parseByeInput() {
         return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
     }
+
+//    public String parseFindInput() {
+//
+//    }
 
 
 
