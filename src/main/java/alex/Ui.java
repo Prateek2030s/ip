@@ -16,8 +16,8 @@ public class Ui {
      */
       public String run(TaskList taskList, Storage storage, String input) {
           try {
-              Parser p = new Parser(input);
-              return p.parseInput(taskList, storage);
+              Parser p = new Parser(input, taskList, storage);
+              return p.parseInput();
           } catch (AlexException e) {
               return e.getMessage();
           }

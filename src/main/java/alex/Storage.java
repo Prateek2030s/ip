@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Represents the storage of the list of tasks
+ * Represents the storage of the list of tasks.
  */
 public class Storage {
     private String filePath;
@@ -18,9 +18,10 @@ public class Storage {
     }
 
     /**
-     * Saves the task list into hard disk
-     * @param taskList User's list of tasks
-     * @throws IOException if the file is not found
+     * Saves the task list into hard disk.
+     *
+     * @param taskList User's list of tasks.
+     * @throws IOException if the file is not found.
      */
     public void saveTask(TaskList taskList) throws IOException {
         FileWriter fw = new FileWriter(filePath);
@@ -30,41 +31,62 @@ public class Storage {
 
     /**
      * Loads the saved tasklist from hard disk
-     * during a new interaction with the chatbot
-     * @return List of tasks saved previously
-     * @throws FileNotFoundException if teh file is nto found
+     * during a new interaction with the chatbot.
+     *
+     * @return List of tasks saved previously.
+     * @throws FileNotFoundException if the file is not found.
      */
     public ArrayList<Task> load() throws FileNotFoundException {
         File f = new File(filePath);
         Scanner sc = new Scanner(f);
         ArrayList<Task> taskList = new ArrayList<>();
+
         while (sc.hasNext()) {
-            String s = sc.nextLine();
-            String[] parts = s.split(" / ");
-            String type = parts[0];
-            int taskState = Integer.parseInt(parts[1]);
-            String description = parts[2];
-            switch (type) {
-            case "T":
-                Task t = new Todo(description);
-                t.handleTask(taskState);
-                taskList.add(t);
-                break;
-
-            case "D":
-                Task t1 = new Deadline(description, parts[3]);
-                t1.handleTask(taskState);
-                taskList.add(t1);
-                break;
-
-            case "E":
-                Task t2 = new Event(description, parts[3], parts[4]);
-                t2.handleTask(taskState);
-                taskList.add(t2);
-                break;
-            }
+            Task task = this.parseLine(sc.nextLine());
+            taskList.add(task);
         }
+
         sc.close();
         return taskList;
     }
+
+    /**
+     * Converts the String form of task stored to actual task that will be loaded.
+     *
+     * @param line The current line of task description read from the scanner.
+     * @return The task after being converted from the String form.
+     */
+    private Task parseLine(String line) {
+        String[] parts = line.split(" / ");
+        String type = parts[0];
+        int taskState = Integer.parseInt(parts[1]);
+
+        Task task = loadTask(type, parts);
+        task.handleTask(taskState);
+        return task;
+    }
+
+    /**
+     * Loads the task based on its String representation.
+     *
+     * @param taskType The first of each task type.
+     *                 T - Todo
+     *                 E - Event
+     *                 D - Deadline
+     * @param parts A collection of String giving the details of the task to be loaded.
+     * @return The task based on the details.
+     */
+    private Task loadTask(String taskType, String[] parts) {
+        switch (taskType) {
+        case "T":
+            return new Todo(parts[2]);
+        case "D":
+            return new Deadline(parts[2], parts[3]);
+        case "E":
+            return new Event(parts[2], parts[3], parts[4]);
+        default:
+            throw new IllegalArgumentException("Unknown task type");
+        }
+    }
+
 }
