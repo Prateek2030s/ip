@@ -19,10 +19,20 @@ public class Parser {
         this.storage = storage;
     }
 
+    /**
+     * Separates the first word of the input from the rest.
+     *
+     * @return An array with the first element as the first word and second element
+     *         as the remaining words in the input.
+     */
     public String[] inputBreakdown() {
         return input.split(" ", 2);
     }
 
+    /**
+     *
+     * @return The first word of the input.
+     */
     public String firstWord() {
         return this.inputBreakdown()[0];
     }
@@ -60,15 +70,25 @@ public class Parser {
         }
     }
 
+    /**
+     * Creates an event task object based on the details provided and stores and
+     * provides a response to the user for the input beginning with "event".
+     *
+     * @return The response of the chatbot after adding the event into the tasklist.
+     * @throws AlexException If details of the event is missing.
+     */
     private String parseEventInput() throws AlexException {
+        // Checks if the task to be added is not specified to allow the feature to work
         if (inputBreakdown().length <= 1) {
             throw new AlexException("Please state when do you have the event");
         }
 
+        // Creates the Event object so that it can be added into the tasklist
         String[] taskBreakdown = inputBreakdown()[1].split(" / ");
         Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
         taskList.add(toAdd);
 
+        // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
         }
@@ -81,16 +101,26 @@ public class Parser {
         }
     }
 
+    /**
+     * Creates a deadline task object based on the details provided and stores and
+     * provides a response to the user for the input beginning with "deadline".
+     *
+     * @return The response of the chatbot after adding the deadline into the tasklist.
+     * @throws AlexException If details of the deadline task is missing.
+     */
     private String parseDeadlineInput() throws AlexException {
+        // Checks if the task to be added is not specified to allow the feature to work
         if (inputBreakdown().length <= 1) {
             throw new AlexException("Please state what deadline you have and by when");
         }
 
+        // Creates the Deadline object so that it can be added into the tasklist
         String[] taskBreakdown = inputBreakdown()[1].split(" /by ");
         String date = LocalDate.parse(taskBreakdown[1]).format(DateTimeFormatter.ofPattern("MMM d yyyy"));
         Task toAdd = new Deadline(taskBreakdown[0], date);
         taskList.add(toAdd);
 
+        // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
         }
@@ -103,14 +133,24 @@ public class Parser {
         }
     }
 
+    /**
+     * Creates a todo task object based on the details provided and stores and
+     * provides a response to the user for the input beginning with "todo".
+     *
+     * @return The response of the chatbot after adding the todo task into the tasklist.
+     * @throws AlexException If details of the todo task is missing.
+     */
     private String parseTodoInput() throws AlexException {
+        // Checks if the task to be added is not specified to allow the feature to work
         if (inputBreakdown().length <= 1) {
             throw new AlexException("Please state what you would like todo");
         }
 
+        // Creates the Todo object so that it can be added into the tasklist
         Task toAdd = new Todo(inputBreakdown()[1]);
         taskList.add(toAdd);
 
+        // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
         }
@@ -123,31 +163,56 @@ public class Parser {
         }
     }
 
-    public String parseGreetingInput() {
+    /**
+     * Responds to the user for the input beginning with "hello".
+     *
+     * @return The response of the chatbot.
+     */
+    private String parseGreetingInput() {
         return "Hello, I'm Alex. What do you want from me";
     }
 
-    public String parseByeInput() {
+    /**
+     * Responds to the user for the input beginning with "bye".
+     *
+     * @return The response of the chatbot.
+     */
+    private String parseByeInput() {
         return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
     }
 
-    public String parseFindInput() {
+    /**
+     * Gives a list of tasks matching the string passed to find.
+     *
+     * @return List of matching tasks.
+     */
+    private String parseFindInput() {
         return taskList.findMatch(this.inputBreakdown()[1]);
     }
 
-    public String parseDeleteInput() throws AlexException {
+    /**
+     * Deletes the stated task in the list.
+     *
+     * @return A response of the chatbot after deleting the stated task.
+     * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
+     *                       in the list.
+     */
+    private String parseDeleteInput() throws AlexException {
+        // Checks if the task to be deleted is not specified to allow the feature to work
         if (inputBreakdown().length <= 1) {
             throw new AlexException("Please state which task to delete");
         }
 
         int next = Integer.parseInt(inputBreakdown()[1]);
 
+        // Checks if the task number stated is invalid to allow the feature to work
         if (next > taskList.size() || next < 0) {
             throw new AlexException("Invalid number, please try again");
         }
 
         Task removed = taskList.remove(next - 1);
 
+        // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
         }
@@ -160,19 +225,29 @@ public class Parser {
         }
     }
 
-    public String parseMarkInput() throws AlexException {
+    /**
+     * Marks the stated task in the list.
+     *
+     * @return A response of the chatbot after marking the stated task.
+     * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
+     *                       in the list.
+     */
+    private String parseMarkInput() throws AlexException {
+        // Checks if the task to be marked is not specified to allow the feature to work
         if (inputBreakdown().length <= 1) {
             throw new AlexException("Please state which task you would like to mark");
         }
 
         int taskNumber = Integer.parseInt(inputBreakdown()[1]);
 
+        // Checks if the task number stated is invalid to allow the feature to work
         if (taskNumber > taskList.size() || taskNumber < 0) {
             throw new AlexException("Invalid number, please try again");
         }
 
         taskList.mark(taskNumber);
 
+        // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
         }
@@ -182,20 +257,29 @@ public class Parser {
             return "Amazing, Task " + taskNumber + " marked.";
         }
     }
-    
-    public String parseUnmarkInput() throws AlexException {
-        
+
+    /**
+     * Unmarks the stated task in the list.
+     *
+     * @return A response of the chatbot after unmarking the stated task.
+     * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
+     *                       in the list.
+     */
+    private String parseUnmarkInput() throws AlexException {
+        // Checks if the task to be unmarked is not specified to allow the feature to work
         if (inputBreakdown().length <= 1) {
             throw new AlexException("Please state which task you like to unmark");
         }
 
         int taskNumber = Integer.parseInt(inputBreakdown()[1]);
 
+        // Checks if the task number stated is invalid to allow the feature to work
         if (taskNumber > taskList.size() || taskNumber < 0) {
             throw new AlexException("Invalid number, please try again");
         }
         taskList.unmark(taskNumber);
 
+        // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
         }
@@ -206,7 +290,13 @@ public class Parser {
         }
     }
 
-    public String parseUnknownInput() throws AlexException {
+    /**
+     * Handles the input given that is not recognised.
+     *
+     * @return
+     * @throws AlexException Response to unknown inputs.
+     */
+    private String parseUnknownInput() throws AlexException {
         throw new AlexException("HAHAHA but I don't know what it means!");
     }
 
