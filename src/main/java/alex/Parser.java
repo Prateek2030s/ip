@@ -24,6 +24,7 @@ public class Parser {
      */
     public String parseInput(TaskList taskList, Storage storage) throws AlexException {
         String[] splitter = input.split(" ", 2);
+        assert splitter.length > 0 : "The input cannot be empty";
         String firstPart = splitter[0];
 
         if (firstPart.equals("bye")) {
@@ -40,6 +41,7 @@ public class Parser {
 
             int taskNumber = Integer.parseInt(splitter[1]);
 
+            assert taskList.size() >= 0 : "The length of the list should be non-negative";
             if (taskNumber > taskList.size() || taskNumber < 0) {
                 throw new AlexException("Invalid number, please try again");
             }
@@ -64,6 +66,7 @@ public class Parser {
 
             int taskNumber = Integer.parseInt(splitter[1]);
 
+            assert taskList.size() >=0 : "The length of the list should be non-negative";
             if (taskNumber > taskList.size() || taskNumber < 0) {
                 throw new AlexException("Invalid number, please try again");
             }
@@ -148,6 +151,7 @@ public class Parser {
             }
 
             int next = Integer.parseInt(splitter[1]);
+            assert taskList.size() >=0 : "The length of the list should be non-negative";
 
             if (next > taskList.size() || next < 0) {
                 throw new AlexException("Invalid number, please try again");
