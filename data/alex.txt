@@ -1,4 +1,5 @@
 T / 1 / play
 T / 0 / gea1000
 T / 1 / cs2100
-T / 1 / cs2100 lab 2
+T / 1 / cs2103t
+T / 1 / ip
