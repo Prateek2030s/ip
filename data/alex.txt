@@ -1,5 +1,5 @@
+T / 1 / sleep
 T / 1 / play
-T / 0 / gea1000
-T / 1 / cs2100
-T / 1 / cs2103t
-T / 1 / ip
+T / 0 / beat ale
+T / 1 / gea1000
+T / 1 / technologic

@@ -44,6 +44,10 @@ public class Parser {
      * @throws AlexException If an invalid input is detected.
      */
     public String parseInput() throws AlexException {
+    public String parseInput(TaskList taskList, Storage storage) throws AlexException {
+        String[] splitter = input.split(" ", 2);
+        assert splitter.length > 0 : "The input cannot be empty";
+        String firstPart = splitter[0];
 
         if (firstWord().equals("bye")) {
             return this.parseByeInput();
@@ -70,6 +74,31 @@ public class Parser {
         }
     }
 
+        } else if (firstPart.equals("mark")) {
+
+            if (splitter.length <= 1) {
+                throw new AlexException("Please state which task you would like to mark");
+            }
+
+            int taskNumber = Integer.parseInt(splitter[1]);
+
+            assert taskList.size() >= 0 : "The length of the list should be non-negative";
+            if (taskNumber > taskList.size() || taskNumber < 0) {
+                throw new AlexException("Invalid number, please try again");
+            }
+
+             taskList.mark(taskNumber);
+
+
+            try {
+                storage.saveTask(taskList);
+            }
+            catch (IOException e) {
+                return ("File not found. Unable to save");
+            } finally {
+                return "Amazing, Task " + taskNumber + " marked.";
+            }
+
     /**
      * Creates an event task object based on the details provided and stores and
      * provides a response to the user for the input beginning with "event".
@@ -87,6 +116,31 @@ public class Parser {
         String[] taskBreakdown = inputBreakdown()[1].split(" / ");
         Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
         taskList.add(toAdd);
+            int taskNumber = Integer.parseInt(splitter[1]);
+
+            assert taskList.size() >=0 : "The length of the list should be non-negative";
+            if (taskNumber > taskList.size() || taskNumber < 0) {
+                throw new AlexException("Invalid number, please try again");
+            }
+              taskList.unmark(taskNumber);
+
+            try {
+                storage.saveTask(taskList);
+            }
+            catch (IOException e) {
+                return ("File not found. Unable to save");
+            } finally {
+                return  "Amazing, Task " + taskNumber + " unmarked.";
+            }
+
+        } else if (firstPart.equals("todo")) {
+
+            if (splitter.length <= 1) {
+                throw new AlexException("Please state what you would like todo");
+            }
+
+            Task toAdd = new Todo(splitter[1]);
+            taskList.add(toAdd);
 
         // Stores the current tasklist into hard disk to keep track
         try {
@@ -204,6 +258,8 @@ public class Parser {
         }
 
         int next = Integer.parseInt(inputBreakdown()[1]);
+            int next = Integer.parseInt(splitter[1]);
+            assert taskList.size() >=0 : "The length of the list should be non-negative";
 
         // Checks if the task number stated is invalid to allow the feature to work
         if (next > taskList.size() || next < 0) {

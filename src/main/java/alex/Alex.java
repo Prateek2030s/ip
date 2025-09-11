@@ -32,9 +32,11 @@ public class Alex {
      */
     public static String generateLine() {
         String s = "";
+
         for (int i = 0; i < 100; i++) {
             s = s + "_";
         }
+
         return s + "\n";
     }
 
