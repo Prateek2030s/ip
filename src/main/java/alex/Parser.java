@@ -46,25 +46,25 @@ public class Parser {
      */
     public String parseInput() throws AlexException {
 
-        if (firstWord().equals("bye")) {
+        if (firstWord().equals("bye") || firstWord().equals("b")) {
             return this.parseByeInput();
-        } else if (firstWord().equals("list")) {
+        } else if (firstWord().equals("list") || firstWord().equals("l")) {
             return taskList.generateTaskList();
-        } else if (firstWord().equals("mark")) {
+        } else if (firstWord().equals("mark") || firstWord().equals("m")) {
             return this.parseMarkInput();
-        } else if (firstWord().equals("unmark")) {
+        } else if (firstWord().equals("unmark") || firstWord().equals("um")) {
             return this.parseUnmarkInput();
-        } else if (firstWord().equals("todo")) {
+        } else if (firstWord().equals("todo") || firstWord().equals("tt")) {
             return this.parseTodoInput();
-        } else if (firstWord().equals("deadline")) {
+        } else if (firstWord().equals("deadline") || firstWord().equals("dt")) {
             return this.parseDeadlineInput();
-        } else if (firstWord().equals("event")) {
+        } else if (firstWord().equals("event") || firstWord().equals("et")) {
             return this.parseEventInput();
-        } else if (firstWord().equals("delete")) {
+        } else if (firstWord().equals("delete") || firstWord().equals("d")) {
             return this.parseDeleteInput();
-        } else if (firstWord().equals("find")) {
+        } else if (firstWord().equals("find") || firstWord().equals("f")) {
             return this.parseFindInput();
-        } else if (firstWord().equals("hello")) {
+        } else if (firstWord().equals("hello") || firstWord().equals("h")) {
             return this.parseGreetingInput();
         } else {
             return this.parseUnknownInput();
