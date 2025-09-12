@@ -1,5 +1,0 @@
-T / 1 / sleep
-T / 1 / play
-T / 0 / beat ale
-T / 1 / technologic
-T / 1 / finish cs2100
