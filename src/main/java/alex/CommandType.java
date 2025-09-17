@@ -10,7 +10,8 @@ public enum CommandType {
     DELETE("delete"),
     FIND("find"),
     HELLO("hello"),
-    BYE("bye");
+    BYE("bye"),
+    UNKNOWN("unknown");
 
     private String keyword;
 
@@ -24,7 +25,6 @@ public enum CommandType {
                 return c;
             }
         }
-
-        return null;
+        return UNKNOWN;
     }
 }

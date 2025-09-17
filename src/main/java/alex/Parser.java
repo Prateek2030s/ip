@@ -31,7 +31,7 @@ public class Parser {
 
     /**
      *
-     * @return The first word of the input.
+     * @return The first word of the input which is the command.
      */
     public String firstWord() {
         assert this.inputBreakdown().length > 0 : "Input cannot be empty";
@@ -45,28 +45,30 @@ public class Parser {
      * @throws AlexException If an invalid input is detected.
      */
     public String parseInput() throws AlexException {
+        CommandType command = CommandType.stringToEnum(this.firstWord());
 
-        if (firstWord().equals("bye") || firstWord().equals("b")) {
-            return this.parseByeInput();
-        } else if (firstWord().equals("list") || firstWord().equals("l")) {
-            return taskList.generateTaskList();
-        } else if (firstWord().equals("mark") || firstWord().equals("m")) {
-            return this.parseMarkInput();
-        } else if (firstWord().equals("unmark") || firstWord().equals("um")) {
-            return this.parseUnmarkInput();
-        } else if (firstWord().equals("todo") || firstWord().equals("tt")) {
+        switch (command) {
+        case TODO:
             return this.parseTodoInput();
-        } else if (firstWord().equals("deadline") || firstWord().equals("dt")) {
+        case DEADLINE:
             return this.parseDeadlineInput();
-        } else if (firstWord().equals("event") || firstWord().equals("et")) {
+        case EVENT:
             return this.parseEventInput();
-        } else if (firstWord().equals("delete") || firstWord().equals("d")) {
-            return this.parseDeleteInput();
-        } else if (firstWord().equals("find") || firstWord().equals("f")) {
-            return this.parseFindInput();
-        } else if (firstWord().equals("hello") || firstWord().equals("h")) {
+        case LIST:
+            return taskList.generateTaskList();
+        case BYE:
+            return this.parseByeInput();
+        case HELLO:
             return this.parseGreetingInput();
-        } else {
+        case MARK:
+            return this.parseMarkInput();
+        case UNMARK:
+            return this.parseUnmarkInput();
+        case FIND:
+            return this.parseFindInput();
+        case DELETE:
+            return this.parseDeleteInput();
+        default:
             return this.parseUnknownInput();
         }
     }
@@ -124,8 +126,7 @@ public class Parser {
         // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return ("File not found. Unable to save");
         } finally {
             String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
@@ -154,8 +155,7 @@ public class Parser {
         // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return ("File not found. Unable to save");
         } finally {
             String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
@@ -297,7 +297,7 @@ public class Parser {
     /**
      * Handles the input given that is not recognised.
      *
-     * @return
+     * @return Nothing in this method
      * @throws AlexException Response to unknown inputs.
      */
     private String parseUnknownInput() throws AlexException {
