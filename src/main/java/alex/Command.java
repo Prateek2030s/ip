@@ -2,5 +2,6 @@ package alex;
 
 public interface Command {
 
-    String response();
+    String response(String message);
+
 }

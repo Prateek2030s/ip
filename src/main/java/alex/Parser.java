@@ -49,7 +49,7 @@ public class Parser {
 
         switch (command) {
         case TODO:
-            return this.parseTodoInput();
+            return new TodoTaskCommand(inputBreakdown()).execute(taskList, storage);
         case DEADLINE:
             return this.parseDeadlineInput();
         case EVENT:
