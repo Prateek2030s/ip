@@ -12,8 +12,11 @@ import alex.TaskList;
 
 public class DeadlineTaskCommand extends TaskCommand {
 
-    public DeadlineTaskCommand(String[] inputBreakdown) {
-        super(inputBreakdown);
+    private Storage storage;
+
+    public DeadlineTaskCommand(String[] inputBreakdown, TaskList taskList, Storage storage) {
+        super(inputBreakdown, taskList);
+        this.storage = storage;
     }
 
     public String[] taskBreakdown() throws AlexException {
@@ -21,12 +24,13 @@ public class DeadlineTaskCommand extends TaskCommand {
     }
 
     @Override
-    public String execute(TaskList taskList, Storage storage) throws AlexException {
+    public String execute() throws AlexException {
         // Creates the Event object so that it can be added into the tasklist
         String DeadlineDescription = taskBreakdown()[0];
         String DeadlineDate = LocalDate.parse(taskBreakdown()[1]).format(DateTimeFormatter.ofPattern("MMM d yyyy"));
 
         Task toAdd = new Deadline(DeadlineDescription, DeadlineDate);
+        TaskList taskList = getTaskList();
         taskList.add(toAdd);
 
         // Stores the current tasklist into hard disk to keep track
@@ -38,12 +42,12 @@ public class DeadlineTaskCommand extends TaskCommand {
         } finally {
             String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
             String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return response(addTask + taskLength);
+            return addTask + taskLength;
         }
     }
 
     @Override
-    public String response(String message) {
-        return message;
+    public String response() throws AlexException {
+        return this.execute();
     }
 }

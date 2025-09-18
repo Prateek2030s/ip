@@ -10,14 +10,18 @@ import alex.Todo;
 
 public class TodoTaskCommand extends TaskCommand {
 
-    public TodoTaskCommand(String[] inputBreakdown)  {
-        super(inputBreakdown);
+    private Storage storage;
+
+    public TodoTaskCommand(String[] inputBreakdown, TaskList taskList, Storage storage)  {
+        super(inputBreakdown, taskList);
+        this.storage = storage;
     }
 
     @Override
-    public String execute(TaskList taskList, Storage storage) throws AlexException {
+    public String execute() throws AlexException {
         // Creates the Todo object so that it can be added into the tasklist
         Task toAdd = new Todo(this.getTarget("Please state what you would like todo"));
+        TaskList taskList = getTaskList();
         taskList.add(toAdd);
 
         // Stores the current tasklist into hard disk to keep track
@@ -28,13 +32,13 @@ public class TodoTaskCommand extends TaskCommand {
         } finally {
             String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
             String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return response(addTask + taskLength);
+            return addTask + taskLength;
         }
     }
 
     @Override
-    public String response(String message) {
-        return message;
+    public String response() throws AlexException {
+        return this.execute();
     }
 
 }

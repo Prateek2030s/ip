@@ -59,7 +59,7 @@ public class TaskList {
     }
 
     public String findMatch(String find) {
-        String ans = Alex.LINE + "Here are the matching tasks in your list:\n";
+        String ans = "";
         int i = 1;
         for (Task task : taskList) {
             if (task.toString().contains(find)) {
@@ -67,7 +67,6 @@ public class TaskList {
                 i++;
             }
         }
-        ans = ans + Alex.LINE;
         return ans;
     }
 

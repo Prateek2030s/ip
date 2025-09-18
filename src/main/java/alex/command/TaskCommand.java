@@ -7,15 +7,21 @@ import alex.TaskList;
 public abstract class TaskCommand implements Command {
 
     private String[] inputBreakdown;
+    private TaskList taskList;
 
-    public TaskCommand(String[] inputBreakdown)  {
+    public TaskCommand(String[] inputBreakdown, TaskList taskList)  {
       this.inputBreakdown = inputBreakdown;
+      this.taskList = taskList;
     }
 
-    public abstract String execute(TaskList taskList, Storage storage) throws AlexException;
+    public abstract String execute() throws AlexException;
 
     public String[] getInputBreakdown() {
         return this.inputBreakdown;
+    }
+
+    public TaskList getTaskList() {
+        return this.taskList;
     }
 
     public String getTarget(String errorMessage) throws AlexException {

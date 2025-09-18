@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import alex.command.DeadlineTaskCommand;
 import alex.command.DeleteTaskCommand;
 import alex.command.EventTaskCommand;
+import alex.command.FindTaskCommand;
+import alex.command.MarkTaskCommand;
 import alex.command.TodoTaskCommand;
 
 /**
@@ -54,11 +56,11 @@ public class Parser {
 
         switch (command) {
         case TODO:
-            return new TodoTaskCommand(inputBreakdown()).execute(taskList, storage);
+            return new TodoTaskCommand(inputBreakdown(), taskList, storage).response();
         case DEADLINE:
-            return new DeadlineTaskCommand(inputBreakdown()).execute(taskList, storage);
+            return new DeadlineTaskCommand(inputBreakdown(), taskList, storage).response();
         case EVENT:
-            return new EventTaskCommand(inputBreakdown()).execute(taskList, storage);
+            return new EventTaskCommand(inputBreakdown(), taskList, storage).response();
         case LIST:
             return taskList.generateTaskList();
         case BYE:
@@ -66,13 +68,13 @@ public class Parser {
         case HELLO:
             return this.parseGreetingInput();
         case MARK:
-            return this.parseMarkInput();
+            return new MarkTaskCommand(inputBreakdown(), taskList, storage, true).response();
         case UNMARK:
-            return this.parseUnmarkInput();
+            return new MarkTaskCommand(inputBreakdown(), taskList, storage, false).response();
         case FIND:
-            return this.parseFindInput();
+            return new FindTaskCommand(inputBreakdown(), taskList).response();
         case DELETE:
-            return new DeleteTaskCommand(inputBreakdown()).execute(taskList, storage);
+            return new DeleteTaskCommand(inputBreakdown(), taskList, storage).response();
         default:
             return this.parseUnknownInput();
         }
@@ -128,9 +130,7 @@ public class Parser {
      *
      * @return List of matching tasks.
      */
-    private String parseFindInput() {
-        return taskList.findMatch(this.inputBreakdown()[1]);
-    }
+
 
     /**
      * Deletes the stated task in the list.

@@ -4,20 +4,37 @@ import java.io.IOException;
 
 import alex.AlexException;
 import alex.Storage;
-import alex.Task;
 import alex.TaskList;
 
-public class DeleteTaskCommand extends TaskCommand {
+public class MarkTaskCommand extends TaskCommand {
 
     private Storage storage;
+    private boolean isMark;
 
-    public DeleteTaskCommand(String[] inputBreakdown, TaskList taskList, Storage storage) {
+    public MarkTaskCommand(String[] inputBreakdown, TaskList taskList, Storage storage, boolean isMark) {
         super(inputBreakdown, taskList);
         this.storage = storage;
+        this.isMark = isMark;
     }
 
     public int taskNumber() throws AlexException {
-        return Integer.parseInt(this.getTarget("Please state which task to delete"));
+        String errorMessage;
+        if (isMark) {
+            errorMessage = "Please state which task you would like to mark";
+        } else {
+            errorMessage = "Please state which task you would like to unmark";
+        }
+        return Integer.parseInt(this.getTarget(errorMessage));
+    }
+
+    public String markType(int taskNumber) {
+        if (isMark) {
+            getTaskList().mark(taskNumber);
+            return "Amazing, Task " + taskNumber + " marked.";
+        } else {
+            getTaskList().unmark(taskNumber);
+            return "Amazing, Task " + taskNumber + " unmarked.";
+        }
     }
 
     @Override
@@ -28,7 +45,7 @@ public class DeleteTaskCommand extends TaskCommand {
             throw new AlexException("Invalid number, please try again");
         }
 
-        Task deleteTask = getTaskList().remove(taskNumber() - 1);
+        String responseMessage = markType(taskNumber());
 
         // Stores the current tasklist into hard disk to keep track
         try {
@@ -37,9 +54,7 @@ public class DeleteTaskCommand extends TaskCommand {
         catch (IOException e) {
             return ("File not found. Unable to save");
         } finally {
-            String afterDeleteTask = String.format("Ok, I've deleted this task: %s\n", deleteTask);
-            String taskLength = "Watch out, you have " + getTaskList().size() + " tasks left.";
-            return afterDeleteTask + taskLength;
+            return responseMessage;
         }
     }
 
@@ -47,4 +62,6 @@ public class DeleteTaskCommand extends TaskCommand {
     public String response() throws AlexException {
         return this.execute();
     }
+
+
 }

@@ -1,7 +1,9 @@
 package alex.command;
 
+import alex.AlexException;
+
 public interface Command {
 
-    String response(String message);
+    String response() throws AlexException;
 
 }

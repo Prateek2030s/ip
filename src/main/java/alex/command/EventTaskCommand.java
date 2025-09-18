@@ -10,8 +10,11 @@ import alex.TaskList;
 
 public class EventTaskCommand extends TaskCommand {
 
-    public EventTaskCommand(String[] inputBreakdown) {
-        super(inputBreakdown);
+    private Storage storage;
+
+    public EventTaskCommand(String[] inputBreakdown, TaskList taskList, Storage storage) {
+        super(inputBreakdown, taskList);
+        this.storage = storage;
     }
 
     public String[] taskBreakdown() throws AlexException {
@@ -19,30 +22,30 @@ public class EventTaskCommand extends TaskCommand {
     }
 
     @Override
-    public String execute(TaskList taskList, Storage storage) throws AlexException {
+    public String execute() throws AlexException {
         // Creates the Event object so that it can be added into the tasklist
         String eventDescription = taskBreakdown()[0];
         String eventFromTime = taskBreakdown()[1];
         String eventEndTime = taskBreakdown()[2];
 
         Task toAdd = new Event(eventDescription,eventFromTime,eventEndTime);
-        taskList.add(toAdd);
+        getTaskList().add(toAdd);
 
         // Stores the current tasklist into hard disk to keep track
         try {
-            storage.saveTask(taskList);
+            storage.saveTask(getTaskList());
         }
         catch (IOException e) {
             return ("File not found. Unable to save");
         } finally {
             String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return response(addTask + taskLength);
+            String taskLength = "Watch out, you have " + getTaskList().size() + " tasks left.";
+            return addTask + taskLength;
         }
     }
 
     @Override
-    public String response(String message) {
-        return message;
+    public String response() throws AlexException {
+        return this.execute();
     }
 }
