@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import alex.command.DeadlineTaskCommand;
+import alex.command.DeleteTaskCommand;
 import alex.command.EventTaskCommand;
 import alex.command.TodoTaskCommand;
 
@@ -54,7 +56,7 @@ public class Parser {
         case TODO:
             return new TodoTaskCommand(inputBreakdown()).execute(taskList, storage);
         case DEADLINE:
-            return this.parseDeadlineInput();
+            return new DeadlineTaskCommand(inputBreakdown()).execute(taskList, storage);
         case EVENT:
             return new EventTaskCommand(inputBreakdown()).execute(taskList, storage);
         case LIST:
@@ -70,7 +72,7 @@ public class Parser {
         case FIND:
             return this.parseFindInput();
         case DELETE:
-            return this.parseDeleteInput();
+            return new DeleteTaskCommand(inputBreakdown()).execute(taskList, storage);
         default:
             return this.parseUnknownInput();
         }
@@ -83,29 +85,7 @@ public class Parser {
      * @return The response of the chatbot after adding the event into the tasklist.
      * @throws AlexException If details of the event is missing.
      */
-    private String parseEventInput() throws AlexException {
-        // Checks if the task to be added is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state when do you have the event");
-        }
 
-        // Creates the Event object so that it can be added into the tasklist
-        String[] taskBreakdown = inputBreakdown()[1].split(" / ");
-        Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
-        taskList.add(toAdd);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return addTask + taskLength;
-        }
-    }
 
     /**
      * Creates a deadline task object based on the details provided and stores and
@@ -114,29 +94,7 @@ public class Parser {
      * @return The response of the chatbot after adding the deadline into the tasklist.
      * @throws AlexException If details of the deadline task is missing.
      */
-    private String parseDeadlineInput() throws AlexException {
-        // Checks if the task to be added is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state what deadline you have and by when");
-        }
 
-        // Creates the Deadline object so that it can be added into the tasklist
-        String[] taskBreakdown = inputBreakdown()[1].split(" /by ");
-        String date = LocalDate.parse(taskBreakdown[1]).format(DateTimeFormatter.ofPattern("MMM d yyyy"));
-        Task toAdd = new Deadline(taskBreakdown[0], date);
-        taskList.add(toAdd);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        } catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return addTask + taskLength;
-        }
-    }
 
     /**
      * Creates a todo task object based on the details provided and stores and
@@ -145,27 +103,7 @@ public class Parser {
      * @return The response of the chatbot after adding the todo task into the tasklist.
      * @throws AlexException If details of the todo task is missing.
      */
-//    private String parseTodoInput() throws AlexException {
-//        // Checks if the task to be added is not specified to allow the feature to work
-//        if (inputBreakdown().length <= 1) {
-//            throw new AlexException("Please state what you would like todo");
-//        }
-//
-//        // Creates the Todo object so that it can be added into the tasklist
-//        Task toAdd = new Todo(inputBreakdown()[1]);
-//        taskList.add(toAdd);
-//
-//        // Stores the current tasklist into hard disk to keep track
-//        try {
-//            storage.saveTask(taskList);
-//        } catch (IOException e) {
-//            return ("File not found. Unable to save");
-//        } finally {
-//            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-//            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-//            return addTask + taskLength;
-//        }
-//    }
+
 
     /**
      * Responds to the user for the input beginning with "hello".
@@ -201,34 +139,6 @@ public class Parser {
      * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
      *                       in the list.
      */
-    private String parseDeleteInput() throws AlexException {
-        // Checks if the task to be deleted is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state which task to delete");
-        }
-
-        int next = Integer.parseInt(inputBreakdown()[1]);
-
-        assert taskList.size() >=0 : "The length of the list should be non-negative";
-        // Checks if the task number stated is invalid to allow the feature to work
-        if (next > taskList.size() || next < 0) {
-            throw new AlexException("Invalid number, please try again");
-        }
-
-        Task removed = taskList.remove(next - 1);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String deleteTask = String.format("Ok, I've deleted this task: %s\n", removed);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return deleteTask + taskLength;
-        }
-    }
 
     /**
      * Marks the stated task in the list.
