@@ -1,6 +1,12 @@
-package alex;
+package alex.command;
 
 import java.io.IOException;
+
+import alex.AlexException;
+import alex.Event;
+import alex.Storage;
+import alex.Task;
+import alex.TaskList;
 
 public class EventTaskCommand extends TaskCommand {
 

@@ -1,6 +1,12 @@
-package alex;
+package alex.command;
 
 import java.io.IOException;
+
+import alex.AlexException;
+import alex.Storage;
+import alex.Task;
+import alex.TaskList;
+import alex.Todo;
 
 public class TodoTaskCommand extends TaskCommand {
 

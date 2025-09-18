@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import alex.command.EventTaskCommand;
+import alex.command.TodoTaskCommand;
+
 /**
  * Represents the procedure to understand user inputs.
  */
@@ -53,7 +56,7 @@ public class Parser {
         case DEADLINE:
             return this.parseDeadlineInput();
         case EVENT:
-            return this.parseEventInput();
+            return new EventTaskCommand(inputBreakdown()).execute(taskList, storage);
         case LIST:
             return taskList.generateTaskList();
         case BYE:

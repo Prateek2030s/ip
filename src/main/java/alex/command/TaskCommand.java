@@ -1,4 +1,8 @@
-package alex;
+package alex.command;
+
+import alex.AlexException;
+import alex.Storage;
+import alex.TaskList;
 
 public abstract class TaskCommand implements Command {
 

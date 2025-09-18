@@ -1,4 +1,4 @@
-package alex;
+package alex.command;
 
 public interface Command {
 
