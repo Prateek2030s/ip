@@ -1,13 +1,12 @@
 package alex;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
+import alex.command.ByeCommand;
 import alex.command.DeadlineTaskCommand;
 import alex.command.DeleteTaskCommand;
 import alex.command.EventTaskCommand;
 import alex.command.FindTaskCommand;
+import alex.command.HelloCommand;
+import alex.command.ListCommand;
 import alex.command.MarkTaskCommand;
 import alex.command.TodoTaskCommand;
 
@@ -49,7 +48,7 @@ public class Parser {
      * Parses user inputs and returns the chatbot's response.
      *
      * @return Chatbot's response to parsed user input.
-     * @throws AlexException If an invalid input is detected.
+     * @throws AlexException If any invalid input is detected.
      */
     public String parseInput() throws AlexException {
         CommandType command = CommandType.stringToEnum(this.firstWord());
@@ -62,11 +61,11 @@ public class Parser {
         case EVENT:
             return new EventTaskCommand(inputBreakdown(), taskList, storage).response();
         case LIST:
-            return taskList.generateTaskList();
+            return new ListCommand(taskList).response();
         case BYE:
-            return this.parseByeInput();
+            return new ByeCommand().response();
         case HELLO:
-            return this.parseGreetingInput();
+            return new HelloCommand().response();
         case MARK:
             return new MarkTaskCommand(inputBreakdown(), taskList, storage, true).response();
         case UNMARK:
@@ -76,7 +75,7 @@ public class Parser {
         case DELETE:
             return new DeleteTaskCommand(inputBreakdown(), taskList, storage).response();
         default:
-            return this.parseUnknownInput();
+            throw new AlexException("HAHAHA I don't know what it means!");
         }
     }
 
@@ -112,18 +111,14 @@ public class Parser {
      *
      * @return The response of the chatbot.
      */
-    private String parseGreetingInput() {
-        return "Hello, I'm Alex. What do you want from me";
-    }
+
 
     /**
      * Responds to the user for the input beginning with "bye".
      *
      * @return The response of the chatbot.
      */
-    private String parseByeInput() {
-        return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
-    }
+
 
     /**
      * Gives a list of tasks matching the string passed to find.
@@ -147,32 +142,7 @@ public class Parser {
      * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
      *                       in the list.
      */
-    private String parseMarkInput() throws AlexException {
-        // Checks if the task to be marked is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state which task you would like to mark");
-        }
 
-        int taskNumber = Integer.parseInt(inputBreakdown()[1]);
-
-        assert taskList.size() >=0 : "The length of the list should be non-negative";
-        // Checks if the task number stated is invalid to allow the feature to work
-        if (taskNumber > taskList.size() || taskNumber < 0) {
-            throw new AlexException("Invalid number, please try again");
-        }
-
-        taskList.mark(taskNumber);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            return "Amazing, Task " + taskNumber + " marked.";
-        }
-    }
 
     /**
      * Unmarks the stated task in the list.
@@ -181,31 +151,7 @@ public class Parser {
      * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
      *                       in the list.
      */
-    private String parseUnmarkInput() throws AlexException {
-        // Checks if the task to be unmarked is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state which task you like to unmark");
-        }
 
-        int taskNumber = Integer.parseInt(inputBreakdown()[1]);
-
-        assert taskList.size() >=0 : "The length of the list should be non-negative";
-        // Checks if the task number stated is invalid to allow the feature to work
-        if (taskNumber > taskList.size() || taskNumber < 0) {
-            throw new AlexException("Invalid number, please try again");
-        }
-        taskList.unmark(taskNumber);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            return  "Amazing, Task " + taskNumber + " unmarked.";
-        }
-    }
 
     /**
      * Handles the input given that is not recognised.
@@ -213,8 +159,6 @@ public class Parser {
      * @return Nothing in this method
      * @throws AlexException Response to unknown inputs.
      */
-    private String parseUnknownInput() throws AlexException {
-        throw new AlexException("HAHAHA but I don't know what it means!");
-    }
+
 
 }
