@@ -29,11 +29,9 @@ public class MarkTaskCommand extends TaskCommand {
 
     public String markType(int taskNumber) {
         if (isMark) {
-            getTaskList().mark(taskNumber);
-            return "Amazing, Task " + taskNumber + " marked.";
+            return getTaskList().mark(taskNumber);
         } else {
-            getTaskList().unmark(taskNumber);
-            return "Amazing, Task " + taskNumber + " unmarked.";
+            return getTaskList().unmark(taskNumber);
         }
     }
 
