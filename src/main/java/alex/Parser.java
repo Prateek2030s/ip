@@ -142,27 +142,27 @@ public class Parser {
      * @return The response of the chatbot after adding the todo task into the tasklist.
      * @throws AlexException If details of the todo task is missing.
      */
-    private String parseTodoInput() throws AlexException {
-        // Checks if the task to be added is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state what you would like todo");
-        }
-
-        // Creates the Todo object so that it can be added into the tasklist
-        Task toAdd = new Todo(inputBreakdown()[1]);
-        taskList.add(toAdd);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        } catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return addTask + taskLength;
-        }
-    }
+//    private String parseTodoInput() throws AlexException {
+//        // Checks if the task to be added is not specified to allow the feature to work
+//        if (inputBreakdown().length <= 1) {
+//            throw new AlexException("Please state what you would like todo");
+//        }
+//
+//        // Creates the Todo object so that it can be added into the tasklist
+//        Task toAdd = new Todo(inputBreakdown()[1]);
+//        taskList.add(toAdd);
+//
+//        // Stores the current tasklist into hard disk to keep track
+//        try {
+//            storage.saveTask(taskList);
+//        } catch (IOException e) {
+//            return ("File not found. Unable to save");
+//        } finally {
+//            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
+//            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
+//            return addTask + taskLength;
+//        }
+//    }
 
     /**
      * Responds to the user for the input beginning with "hello".
