@@ -19,6 +19,10 @@ public enum CommandType {
         this.keyword = keyword;
     }
 
+    public String getKeyword() {
+        return this.keyword;
+    }
+
     public static CommandType stringToEnum(String input) {
         for (CommandType c : CommandType.values()) {
             if (c.keyword.equalsIgnoreCase(input)) {
