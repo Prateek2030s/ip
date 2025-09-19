@@ -22,10 +22,9 @@ public class TaskList {
      *
      * @param index Position of task in the list.
      */
-    public void mark(int index) {
+    public String mark(int index) {
         taskList.get(index - 1).markTask();
-        System.out.println(Alex.LINE + "Nice! I've marked this task as done:\n" + taskList.get(index - 1)
-                + "\n" + Alex.LINE);
+        return "Nice! I've marked this task as done:\n" + taskList.get(index - 1) + "\n" ;
     }
 
     /**
@@ -33,10 +32,10 @@ public class TaskList {
      *
      * @param index Position of task in the list.
      */
-    public void unmark(int index) {
+    public String unmark(int index) {
         Task task = taskList.get(index - 1);
         task.unmarkTask();
-        System.out.println(Alex.LINE + "Ok, I've marked this task as not done yet:\n" + task + "\n" + Alex.LINE);
+        return "Ok, I've marked this task as not done yet:\n" + task + "\n";
     }
 
     /**
@@ -59,7 +58,7 @@ public class TaskList {
     }
 
     public String findMatch(String find) {
-        String ans = Alex.LINE + "Here are the matching tasks in your list:\n";
+        String ans = "";
         int i = 1;
         for (Task task : taskList) {
             if (task.toString().contains(find)) {
@@ -67,7 +66,6 @@ public class TaskList {
                 i++;
             }
         }
-        ans = ans + Alex.LINE;
         return ans;
     }
 

@@ -1,8 +1,15 @@
 package alex;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import alex.command.AliasCommand;
+import alex.command.ByeCommand;
+import alex.command.DeadlineTaskCommand;
+import alex.command.DeleteTaskCommand;
+import alex.command.EventTaskCommand;
+import alex.command.FindTaskCommand;
+import alex.command.HelloCommand;
+import alex.command.ListCommand;
+import alex.command.MarkTaskCommand;
+import alex.command.TodoTaskCommand;
 
 /**
  * Represents the procedure to understand user inputs.
@@ -10,13 +17,9 @@ import java.time.format.DateTimeFormatter;
 public class Parser {
 
     private String input;
-    private TaskList taskList;
-    private Storage storage;
 
-    public Parser(String input, TaskList taskList, Storage storage) {
+    public Parser(String input) {
         this.input = input;
-        this.taskList = taskList;
-        this.storage = storage;
     }
 
     /**
@@ -31,7 +34,7 @@ public class Parser {
 
     /**
      *
-     * @return The first word of the input.
+     * @return The first word of the input which is the command.
      */
     public String firstWord() {
         assert this.inputBreakdown().length > 0 : "Input cannot be empty";
@@ -42,32 +45,36 @@ public class Parser {
      * Parses user inputs and returns the chatbot's response.
      *
      * @return Chatbot's response to parsed user input.
-     * @throws AlexException If an invalid input is detected.
+     * @throws AlexException If any invalid input is detected.
      */
-    public String parseInput() throws AlexException {
+    public String parseInput(TaskList taskList, Alias aliases, Storage storage) throws AlexException {
+        CommandType command = CommandType.stringToEnum(this.firstWord(), aliases);
 
-        if (firstWord().equals("bye") || firstWord().equals("b")) {
-            return this.parseByeInput();
-        } else if (firstWord().equals("list") || firstWord().equals("l")) {
-            return taskList.generateTaskList();
-        } else if (firstWord().equals("mark") || firstWord().equals("m")) {
-            return this.parseMarkInput();
-        } else if (firstWord().equals("unmark") || firstWord().equals("um")) {
-            return this.parseUnmarkInput();
-        } else if (firstWord().equals("todo") || firstWord().equals("tt")) {
-            return this.parseTodoInput();
-        } else if (firstWord().equals("deadline") || firstWord().equals("dt")) {
-            return this.parseDeadlineInput();
-        } else if (firstWord().equals("event") || firstWord().equals("et")) {
-            return this.parseEventInput();
-        } else if (firstWord().equals("delete") || firstWord().equals("d")) {
-            return this.parseDeleteInput();
-        } else if (firstWord().equals("find") || firstWord().equals("f")) {
-            return this.parseFindInput();
-        } else if (firstWord().equals("hello") || firstWord().equals("h")) {
-            return this.parseGreetingInput();
-        } else {
-            return this.parseUnknownInput();
+        switch (command) {
+        case TODO:
+            return new TodoTaskCommand(inputBreakdown(), taskList, storage).response();
+        case DEADLINE:
+            return new DeadlineTaskCommand(inputBreakdown(), taskList, storage).response();
+        case EVENT:
+            return new EventTaskCommand(inputBreakdown(), taskList, storage).response();
+        case LIST:
+            return new ListCommand(taskList).response();
+        case BYE:
+            return new ByeCommand().response();
+        case HELLO:
+            return new HelloCommand().response();
+        case MARK:
+            return new MarkTaskCommand(inputBreakdown(), taskList, storage, true).response();
+        case UNMARK:
+            return new MarkTaskCommand(inputBreakdown(), taskList, storage, false).response();
+        case FIND:
+            return new FindTaskCommand(inputBreakdown(), taskList).response();
+        case DELETE:
+            return new DeleteTaskCommand(inputBreakdown(), taskList, storage).response();
+        case ALIAS:
+            return new AliasCommand(inputBreakdown(), aliases, storage).response();
+        default:
+            throw new AlexException("HAHAHA I don't know what it means!");
         }
     }
 
@@ -78,29 +85,7 @@ public class Parser {
      * @return The response of the chatbot after adding the event into the tasklist.
      * @throws AlexException If details of the event is missing.
      */
-    private String parseEventInput() throws AlexException {
-        // Checks if the task to be added is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state when do you have the event");
-        }
 
-        // Creates the Event object so that it can be added into the tasklist
-        String[] taskBreakdown = inputBreakdown()[1].split(" / ");
-        Task toAdd = new Event(taskBreakdown[0], taskBreakdown[1],taskBreakdown[2]);
-        taskList.add(toAdd);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return addTask + taskLength;
-        }
-    }
 
     /**
      * Creates a deadline task object based on the details provided and stores and
@@ -109,30 +94,7 @@ public class Parser {
      * @return The response of the chatbot after adding the deadline into the tasklist.
      * @throws AlexException If details of the deadline task is missing.
      */
-    private String parseDeadlineInput() throws AlexException {
-        // Checks if the task to be added is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state what deadline you have and by when");
-        }
 
-        // Creates the Deadline object so that it can be added into the tasklist
-        String[] taskBreakdown = inputBreakdown()[1].split(" /by ");
-        String date = LocalDate.parse(taskBreakdown[1]).format(DateTimeFormatter.ofPattern("MMM d yyyy"));
-        Task toAdd = new Deadline(taskBreakdown[0], date);
-        taskList.add(toAdd);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return addTask + taskLength;
-        }
-    }
 
     /**
      * Creates a todo task object based on the details provided and stores and
@@ -141,55 +103,28 @@ public class Parser {
      * @return The response of the chatbot after adding the todo task into the tasklist.
      * @throws AlexException If details of the todo task is missing.
      */
-    private String parseTodoInput() throws AlexException {
-        // Checks if the task to be added is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state what you would like todo");
-        }
 
-        // Creates the Todo object so that it can be added into the tasklist
-        Task toAdd = new Todo(inputBreakdown()[1]);
-        taskList.add(toAdd);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String addTask = String.format("Ok, I've added this task: %s\n", toAdd);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return addTask + taskLength;
-        }
-    }
 
     /**
      * Responds to the user for the input beginning with "hello".
      *
      * @return The response of the chatbot.
      */
-    private String parseGreetingInput() {
-        return "Hello, I'm Alex. What do you want from me";
-    }
+
 
     /**
      * Responds to the user for the input beginning with "bye".
      *
      * @return The response of the chatbot.
      */
-    private String parseByeInput() {
-        return "Need to leave is it?\n" +  "Goodbye then, see you again soon!";
-    }
+
 
     /**
      * Gives a list of tasks matching the string passed to find.
      *
      * @return List of matching tasks.
      */
-    private String parseFindInput() {
-        return taskList.findMatch(this.inputBreakdown()[1]);
-    }
+
 
     /**
      * Deletes the stated task in the list.
@@ -198,34 +133,6 @@ public class Parser {
      * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
      *                       in the list.
      */
-    private String parseDeleteInput() throws AlexException {
-        // Checks if the task to be deleted is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state which task to delete");
-        }
-
-        int next = Integer.parseInt(inputBreakdown()[1]);
-
-        assert taskList.size() >=0 : "The length of the list should be non-negative";
-        // Checks if the task number stated is invalid to allow the feature to work
-        if (next > taskList.size() || next < 0) {
-            throw new AlexException("Invalid number, please try again");
-        }
-
-        Task removed = taskList.remove(next - 1);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            String deleteTask = String.format("Ok, I've deleted this task: %s\n", removed);
-            String taskLength = "Watch out, you have " + taskList.size() + " tasks left.";
-            return deleteTask + taskLength;
-        }
-    }
 
     /**
      * Marks the stated task in the list.
@@ -234,32 +141,7 @@ public class Parser {
      * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
      *                       in the list.
      */
-    private String parseMarkInput() throws AlexException {
-        // Checks if the task to be marked is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state which task you would like to mark");
-        }
 
-        int taskNumber = Integer.parseInt(inputBreakdown()[1]);
-
-        assert taskList.size() >=0 : "The length of the list should be non-negative";
-        // Checks if the task number stated is invalid to allow the feature to work
-        if (taskNumber > taskList.size() || taskNumber < 0) {
-            throw new AlexException("Invalid number, please try again");
-        }
-
-        taskList.mark(taskNumber);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            return "Amazing, Task " + taskNumber + " marked.";
-        }
-    }
 
     /**
      * Unmarks the stated task in the list.
@@ -268,40 +150,14 @@ public class Parser {
      * @throws AlexException If task to be deleted is not stated or the task to be deleted is not
      *                       in the list.
      */
-    private String parseUnmarkInput() throws AlexException {
-        // Checks if the task to be unmarked is not specified to allow the feature to work
-        if (inputBreakdown().length <= 1) {
-            throw new AlexException("Please state which task you like to unmark");
-        }
 
-        int taskNumber = Integer.parseInt(inputBreakdown()[1]);
-
-        assert taskList.size() >=0 : "The length of the list should be non-negative";
-        // Checks if the task number stated is invalid to allow the feature to work
-        if (taskNumber > taskList.size() || taskNumber < 0) {
-            throw new AlexException("Invalid number, please try again");
-        }
-        taskList.unmark(taskNumber);
-
-        // Stores the current tasklist into hard disk to keep track
-        try {
-            storage.saveTask(taskList);
-        }
-        catch (IOException e) {
-            return ("File not found. Unable to save");
-        } finally {
-            return  "Amazing, Task " + taskNumber + " unmarked.";
-        }
-    }
 
     /**
      * Handles the input given that is not recognised.
      *
-     * @return
+     * @return Nothing in this method
      * @throws AlexException Response to unknown inputs.
      */
-    private String parseUnknownInput() throws AlexException {
-        throw new AlexException("HAHAHA but I don't know what it means!");
-    }
+
 
 }
