@@ -1,4 +1,4 @@
-package alexGUI;
+package alexgui;
 
 import alex.Alex;
 import javafx.fxml.FXML;
@@ -31,7 +31,7 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /** Injects the Alex instance */
     public void setAlex(Alex a) {
         alex = a;
     }

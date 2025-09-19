@@ -1,4 +1,4 @@
-package alexGUI;
+package alexgui;
 
 import javafx.application.Application;
 

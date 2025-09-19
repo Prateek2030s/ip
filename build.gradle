@@ -45,7 +45,7 @@ test {
 }
 
 application {
-    mainClass.set("alexGUI.Launcher")
+    mainClass.set("alexgui.Launcher")
 }
 
 shadowJar {

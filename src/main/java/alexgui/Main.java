@@ -1,4 +1,4 @@
-package alexGUI;
+package alexgui;
 
 import java.io.IOException;
 
@@ -22,6 +22,7 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
+            stage.setTitle("Alex");
             fxmlLoader.<MainWindow>getController().setAlex(alex);  // inject the Duke instance
             stage.show();
         } catch (IOException e) {
