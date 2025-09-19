@@ -1,47 +1,59 @@
 package alex;
 
 /**
- * Represents a general task to be included in the list.
+ * Represents a general task to be included in the task list.
+ * A <code>Task</code> contains a description and a status (done or not done).
  */
 public abstract class Task {
 
     private String description;
     private boolean isDone;
 
+    /**
+     * Constructs a <code>Task</code> with the specified description.
+     * The task is initially not done.
+     *
+     * @param description Description of the task.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
 
     /**
-     * Represents format in which tasks are saved in storage.
+     * Returns the string representation of the task suitable for saving to a file.
      *
-     * @return Format of tasks to be stored.
+     * @return File-friendly string representation of the task.
      */
     public abstract String toFileString();
 
+    /**
+     * Returns the description of the task.
+     *
+     * @return Task description.
+     */
     public String getDescription() {
         return this.description;
     }
 
     /**
-     * Marks task as done
+     * Marks the task as done.
      */
     public void markTask() {
         this.isDone = true;
     }
 
     /**
-     * Unmarks tasks
+     * Marks the task as not done.
      */
     public void unmarkTask() {
         this.isDone = false;
     }
 
     /**
-     * Gives number version to indicate as done or not done.
+     * Returns an integer representing the task's completion state.
      *
-     * @return 0 if done and 1 if not done
+     * @return <code>0</code> if done, <code>1</code> if not done.
      */
     public int doTaskState() {
         if (isDone) {
@@ -52,9 +64,9 @@ public abstract class Task {
     }
 
     /**
-     * Converts number stored to actual representation of done or not done.
+     * Updates the task's completion status based on an integer value.
      *
-     * @param i 0 if done and 1 if not done
+     * @param i <code>0</code> to mark as done, <code>1</code> to mark as not done.
      */
     public void handleTask(int i) {
         if (i == 0) {
@@ -64,6 +76,12 @@ public abstract class Task {
         }
     }
 
+    /**
+     * Returns a string representation of the task suitable for display to the user.
+     * Format: <code>[X] description</code> if done, or <code>[ ] description</code> if not done.
+     *
+     * @return User-friendly string representation of the task.
+     */
     @Override
     public String toString() {
         if (isDone) {

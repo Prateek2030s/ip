@@ -9,22 +9,29 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * Represents the storage of the list of tasks.
+ * Represents the storage mechanism for the user's tasks and command aliases.
+ * Handles saving to and loading from the hard disk.
  */
 public class Storage {
     private String tasklistFilePath;
     private String aliasesListFilePath;
 
+    /**
+     * Constructs a <code>Storage</code> instance with file paths for tasks and aliases.
+     *
+     * @param tasklistFilePath Path to the file storing task list.
+     * @param aliasesListFilePath Path to the file storing command aliases.
+     */
     public Storage(String tasklistFilePath, String aliasesListFilePath) {
-        this.tasklistFilePath= tasklistFilePath;
+        this.tasklistFilePath = tasklistFilePath;
         this.aliasesListFilePath = aliasesListFilePath;
     }
 
     /**
-     * Saves the task list into hard disk.
+     * Saves the user's task list to the hard disk.
      *
      * @param taskList User's list of tasks.
-     * @throws IOException if the file is not found.
+     * @throws IOException If there is an error writing to the file.
      */
     public void saveTask(TaskList taskList) throws IOException {
         FileWriter fw = new FileWriter(tasklistFilePath);
@@ -32,6 +39,12 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Saves the user's command aliases to the hard disk.
+     *
+     * @param alias User's alias mappings.
+     * @throws IOException If there is an error writing to the file.
+     */
     public void saveAliases(Alias alias) throws IOException {
         FileWriter fw = new FileWriter(aliasesListFilePath);
         fw.write(String.valueOf(alias.listOfAliases()));
@@ -39,11 +52,10 @@ public class Storage {
     }
 
     /**
-     * Loads the saved tasklist from hard disk
-     * during a new interaction with the chatbot.
+     * Loads the task list from the hard disk when starting a new session.
      *
-     * @return List of tasks saved previously.
-     * @throws FileNotFoundException if the file is not found.
+     * @return List of tasks previously saved.
+     * @throws FileNotFoundException If the task list file does not exist.
      */
     public ArrayList<Task> loadTasklist() throws FileNotFoundException {
         File f = new File(tasklistFilePath);
@@ -60,10 +72,10 @@ public class Storage {
     }
 
     /**
-     * Converts the String form of task stored to actual task that will be loaded.
+     * Converts a line of saved task data into a <code>Task</code> object.
      *
-     * @param line The current line of task description read from the scanner.
-     * @return The task after being converted from the String form.
+     * @param line The line of text read from the saved task file.
+     * @return The corresponding <code>Task</code> object.
      */
     private Task parseTaskLine(String line) {
         String[] parts = line.split(" / ");
@@ -76,14 +88,12 @@ public class Storage {
     }
 
     /**
-     * Loads the task based on its String representation.
+     * Creates a task object from its string representation.
      *
-     * @param taskType The first of each task type.
-     *                 T - Todo
-     *                 E - Event
-     *                 D - Deadline
-     * @param parts A collection of String giving the details of the task to be loaded.
-     * @return The task based on the details.
+     * @param taskType Type of task (T - Todo, D - Deadline, E - Event).
+     * @param parts Array of strings representing task details.
+     * @return Task object created from the provided details.
+     * @throws IllegalArgumentException If the task type is unrecognized.
      */
     private Task loadTask(String taskType, String[] parts) {
         switch (taskType) {
@@ -98,6 +108,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads the user's command aliases from the hard disk.
+     *
+     * @return Alias object representing previously saved aliases.
+     * @throws FileNotFoundException If the alias file does not exist.
+     */
     public Alias loadAliases() throws FileNotFoundException {
         File f = new File(aliasesListFilePath);
         Scanner sc = new Scanner(f);
@@ -114,9 +130,14 @@ public class Storage {
         return new Alias(aliasMap);
     }
 
+    /**
+     * Splits a line from the alias file into its command and alias keyword parts.
+     *
+     * @param line The line read from the alias file.
+     * @return Array with the first element as the command type and the second element as the alias keyword.
+     */
     public String[] parseAliasLine(String line) {
         String[] aliasParts = line.split(": ");
         return aliasParts;
     }
-
 }
