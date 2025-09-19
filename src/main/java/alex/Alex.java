@@ -3,7 +3,9 @@ package alex;
 import java.io.FileNotFoundException;
 
 /**
- * Represents the chatbot model used.
+ * Represents the chatbot model <code>Alex</code>.
+ * An <code>Alex</code> object manages the chatbot's task list, aliases, storage, and UI.
+ * It loads saved data on startup and processes user input to produce chatbot responses.
  */
 public class Alex {
 
@@ -17,6 +19,11 @@ public class Alex {
 
     private String response = "";
 
+    /**
+     * Constructs an <code>Alex</code> chatbot.
+     * Attempts to load saved task and alias data from storage. If the files are not found,
+     * initializes with empty task list and alias set.
+     */
     public Alex() {
         this.ui = new Ui();
         this.storage = new Storage(tasklistFilePath, aliasesListFilePath);
@@ -30,12 +37,11 @@ public class Alex {
         }
     }
 
-
     /**
-     * Returns chatbot's response to user's input.
+     * Returns the chatbot's response to the specified user input.
      *
      * @param input User's input to the chatbot.
-     * @return Chatbot's response to the input given by the user.
+     * @return Chatbot's response to the input provided by the user.
      */
     public String getResponse(String input) {
         if (!response.isEmpty()) {
@@ -45,5 +51,5 @@ public class Alex {
         }
         return ui.run(taskList, storage, input, aliases);
     }
-
 }
+
