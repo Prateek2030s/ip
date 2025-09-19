@@ -11,6 +11,7 @@ public enum CommandType {
     FIND("find"),
     HELLO("hello"),
     BYE("bye"),
+    ALIAS("alias"),
     UNKNOWN("unknown");
 
     private String keyword;
@@ -23,12 +24,28 @@ public enum CommandType {
         return this.keyword;
     }
 
+    public static CommandType stringToEnum(String input, Alias aliasList) {
+        for (CommandType c : CommandType.values()) {
+            if (c.keyword.equalsIgnoreCase(input)) {
+                return c;
+            }
+        }
+        for (CommandType type : CommandType.values()) {
+            String alias = aliasList.getAlias(type);
+            if (alias != null && alias.equalsIgnoreCase(input)) {
+                return type;
+            }
+        }
+        return UNKNOWN;
+    }
+
     public static CommandType stringToEnum(String input) {
         for (CommandType c : CommandType.values()) {
             if (c.keyword.equalsIgnoreCase(input)) {
                 return c;
             }
         }
+
         return UNKNOWN;
     }
 }

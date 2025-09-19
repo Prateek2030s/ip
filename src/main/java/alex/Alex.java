@@ -6,39 +6,30 @@ import java.io.FileNotFoundException;
  * Represents the chatbot model used.
  */
 public class Alex {
-    // Field for a horizontal line
-    public static final String LINE = Alex.generateLine();
-    private static final String filePath = "./data/alex.txt";
+
+    private static final String tasklistFilePath = "./data/alex.txt";
+    private static final String aliasesListFilePath = "./data/alias.txt";
 
     private Storage storage;
     private TaskList taskList;
+    private Alias aliases;
     private Ui ui;
 
+    private String response = "";
+
     public Alex() {
-        ui = new Ui();
-        storage = new Storage(filePath);
+        this.ui = new Ui();
+        this.storage = new Storage(tasklistFilePath, aliasesListFilePath);
         try {
-            taskList = new TaskList(storage.load());
+            this.taskList = new TaskList(storage.loadTasklist());
+            this.aliases = storage.loadAliases();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-            taskList = new TaskList();
+            response = response + "Saved files are not found";
+            this.taskList = new TaskList();
+            this.aliases = new Alias();
         }
     }
 
-    /**
-     * Generates a straight horizontal line.
-     *
-     * @return Straight horizontal line.
-     */
-    public static String generateLine() {
-        String s = "";
-
-        for (int i = 0; i < 100; i++) {
-            s = s + "_";
-        }
-
-        return s + "\n";
-    }
 
     /**
      * Returns chatbot's response to user's input.
@@ -47,7 +38,12 @@ public class Alex {
      * @return Chatbot's response to the input given by the user.
      */
     public String getResponse(String input) {
-        return ui.run(taskList, storage, input);
+        if (!response.isEmpty()) {
+            String message = response;
+            response = "";
+            return message;
+        }
+        return ui.run(taskList, storage, input, aliases);
     }
 
 }

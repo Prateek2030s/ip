@@ -36,8 +36,7 @@ public class DeadlineTaskCommand extends TaskCommand {
         // Stores the current tasklist into hard disk to keep track
         try {
             storage.saveTask(taskList);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return ("File not found. Unable to save");
         } finally {
             String addTask = String.format("Ok, I've added this task: %s\n", toAdd);

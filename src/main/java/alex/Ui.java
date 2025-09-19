@@ -14,10 +14,10 @@ public class Ui {
      * @param input User's input to the chatbot.
      * @return Response of the chatbot after parsing user's input.
      */
-      public String run(TaskList taskList, Storage storage, String input) {
+      public String run(TaskList taskList, Storage storage, String input, Alias aliases) {
           try {
-              Parser p = new Parser(input, taskList, storage);
-              return p.parseInput();
+              Parser p = new Parser(input);
+              return p.parseInput(taskList, aliases, storage);
           } catch (AlexException e) {
               return e.getMessage();
           }

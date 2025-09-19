@@ -1,5 +1,6 @@
 package alex;
 
+import alex.command.AliasCommand;
 import alex.command.ByeCommand;
 import alex.command.DeadlineTaskCommand;
 import alex.command.DeleteTaskCommand;
@@ -16,13 +17,9 @@ import alex.command.TodoTaskCommand;
 public class Parser {
 
     private String input;
-    private TaskList taskList;
-    private Storage storage;
 
-    public Parser(String input, TaskList taskList, Storage storage) {
+    public Parser(String input) {
         this.input = input;
-        this.taskList = taskList;
-        this.storage = storage;
     }
 
     /**
@@ -50,8 +47,8 @@ public class Parser {
      * @return Chatbot's response to parsed user input.
      * @throws AlexException If any invalid input is detected.
      */
-    public String parseInput() throws AlexException {
-        CommandType command = CommandType.stringToEnum(this.firstWord());
+    public String parseInput(TaskList taskList, Alias aliases, Storage storage) throws AlexException {
+        CommandType command = CommandType.stringToEnum(this.firstWord(), aliases);
 
         switch (command) {
         case TODO:
@@ -74,6 +71,8 @@ public class Parser {
             return new FindTaskCommand(inputBreakdown(), taskList).response();
         case DELETE:
             return new DeleteTaskCommand(inputBreakdown(), taskList, storage).response();
+        case ALIAS:
+            return new AliasCommand(inputBreakdown(), aliases, storage).response();
         default:
             throw new AlexException("HAHAHA I don't know what it means!");
         }

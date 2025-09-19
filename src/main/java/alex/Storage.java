@@ -5,16 +5,19 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
  * Represents the storage of the list of tasks.
  */
 public class Storage {
-    private String filePath;
+    private String tasklistFilePath;
+    private String aliasesListFilePath;
 
-    public Storage(String filePath) {
-        this.filePath = filePath;
+    public Storage(String tasklistFilePath, String aliasesListFilePath) {
+        this.tasklistFilePath= tasklistFilePath;
+        this.aliasesListFilePath = aliasesListFilePath;
     }
 
     /**
@@ -24,8 +27,14 @@ public class Storage {
      * @throws IOException if the file is not found.
      */
     public void saveTask(TaskList taskList) throws IOException {
-        FileWriter fw = new FileWriter(filePath);
+        FileWriter fw = new FileWriter(tasklistFilePath);
         fw.write(String.valueOf(taskList.toSaveList()));
+        fw.close();
+    }
+
+    public void saveAliases(Alias alias) throws IOException {
+        FileWriter fw = new FileWriter(aliasesListFilePath);
+        fw.write(String.valueOf(alias.listOfAliases()));
         fw.close();
     }
 
@@ -36,13 +45,13 @@ public class Storage {
      * @return List of tasks saved previously.
      * @throws FileNotFoundException if the file is not found.
      */
-    public ArrayList<Task> load() throws FileNotFoundException {
-        File f = new File(filePath);
+    public ArrayList<Task> loadTasklist() throws FileNotFoundException {
+        File f = new File(tasklistFilePath);
         Scanner sc = new Scanner(f);
         ArrayList<Task> taskList = new ArrayList<>();
 
         while (sc.hasNext()) {
-            Task task = this.parseLine(sc.nextLine());
+            Task task = this.parseTaskLine(sc.nextLine());
             taskList.add(task);
         }
 
@@ -56,7 +65,7 @@ public class Storage {
      * @param line The current line of task description read from the scanner.
      * @return The task after being converted from the String form.
      */
-    private Task parseLine(String line) {
+    private Task parseTaskLine(String line) {
         String[] parts = line.split(" / ");
         String type = parts[0];
         int taskState = Integer.parseInt(parts[1]);
@@ -87,6 +96,27 @@ public class Storage {
         default:
             throw new IllegalArgumentException("Unknown task type");
         }
+    }
+
+    public Alias loadAliases() throws FileNotFoundException {
+        File f = new File(aliasesListFilePath);
+        Scanner sc = new Scanner(f);
+        HashMap<CommandType, String> aliasMap = new HashMap<>();
+
+        while (sc.hasNext()) {
+            String[] aliasBreakdown = parseAliasLine(sc.nextLine());
+            String commandType = aliasBreakdown[0];
+            CommandType command = CommandType.stringToEnum(commandType);
+            String aliasKeyword = aliasBreakdown[1];
+            aliasMap.put(command, aliasKeyword);
+        }
+
+        return new Alias(aliasMap);
+    }
+
+    public String[] parseAliasLine(String line) {
+        String[] aliasParts = line.split(": ");
+        return aliasParts;
     }
 
 }
