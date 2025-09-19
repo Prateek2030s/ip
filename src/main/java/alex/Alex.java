@@ -1,6 +1,8 @@
 package alex;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Represents the chatbot model <code>Alex</code>.
@@ -27,13 +29,35 @@ public class Alex {
     public Alex() {
         this.ui = new Ui();
         this.storage = new Storage(tasklistFilePath, aliasesListFilePath);
+
+        // Ensure files exist
+        createFileIfNotExist(tasklistFilePath);
+        createFileIfNotExist(aliasesListFilePath);
+
         try {
             this.taskList = new TaskList(storage.loadTasklist());
             this.aliases = storage.loadAliases();
         } catch (FileNotFoundException e) {
-            response = response + "Saved files are not found";
+            // Fallback to empty list/aliases if something went wrong
             this.taskList = new TaskList();
             this.aliases = new Alias();
+        }
+    }
+
+
+    private void createFileIfNotExist(String filePath) {
+        try {
+            File file = new File(filePath);
+            File parentDir = file.getParentFile();
+            if (!parentDir.exists()) {
+                parentDir.mkdirs(); // create parent directories if missing
+            }
+            if (!file.exists()) {
+                file.createNewFile(); // create empty file
+            }
+        } catch (IOException e) {
+            System.out.println("Error creating file: " + filePath);
+            e.printStackTrace();
         }
     }
 
@@ -44,12 +68,8 @@ public class Alex {
      * @return Chatbot's response to the input provided by the user.
      */
     public String getResponse(String input) {
-        if (!response.isEmpty()) {
-            String message = response;
-            response = "";
-            return message;
-        }
         return ui.run(taskList, storage, input, aliases);
     }
 }
+
 
