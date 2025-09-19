@@ -1,7 +1,7 @@
 # Alex User Guide
 
 ## First Look
-![Alex UI](../docs/Ui.png)
+![Alex UI](https://raw.githubusercontent.com/Prateek2030s/ip/refs/heads/master/docs/Ui.png)
 
 Alex is a friendly task assistant that helps you keep track of tasks via a simple chat-style interface. You can add three types of tasks, list and find them, mark/unmark completion, delete tasks, and even create your own aliases for commands.
 

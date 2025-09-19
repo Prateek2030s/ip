@@ -19,7 +19,6 @@ public class Alex {
     private Alias aliases;
     private Ui ui;
 
-    private String response = "";
 
     /**
      * Constructs an <code>Alex</code> chatbot.
